@@ -1,0 +1,9 @@
+grammar org.ats_lang.AnairiatsSats with org.eclipse.xtext.common.Terminals
+
+generate anairiatsSats "http://www.ats_lang.org/AnairiatsSats"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
