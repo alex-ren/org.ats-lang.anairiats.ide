@@ -1,9 +1,1518 @@
-grammar org.ats_lang.AnairiatsSats with org.eclipse.xtext.common.Terminals
+grammar org.ats_lang.AnairiatsSats hidden 
+    (BLANKS, COMMENT_REST, COMMENT_CLIKE, COMMENT0, COMMENT_LINE)
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore	// required for defining terminal rules
 
 generate anairiatsSats "http://www.ats_lang.org/AnairiatsSats"
 
-Model:
-	greetings+=Greeting*;
+/*
+program:
+	x = 'module'
+	AMPERSAND
+	LITERAL_string 
+	LITERAL_char 
+	IDENTIFIER_alp
+	IDENTIFIER_arr
+	IDENTIFIER_dlr
+	IDENTIFIER_sym
+	LITERAL_int
+	LITERAL_intsp
+	LITERAL_float
+	LITERAL_floatsp
+	QUOTELBRACKET+
+	LITERAL_extcode
+	;
+*/
+
+satprogram returns satprogram:
+    m_sta=d0ecseq_sta
+    ;
+
+d0ec_dyn:
+      m_d0ec=d0ec
+    | EXTERN dcstkind m_d0ecargseq=d0ecargseq m_d0cstdec=d0cstdec m_decseq=andd0cstdecseq
+    | EXTERN TYPEDEF LITERAL_string EQ s0exp
+    | EXTERN VAL LITERAL_string EQ d0exp
+    | valkind v0aldec m_valkind=andv0aldecseq
+    | VAL PAR v0aldec m_valpar=andv0aldecseq
+    | VAL REC v0aldec m_valrec=andv0aldecseq
+    | funkind m_d0ecargseq=d0ecargseq m_fundec=f0undec m_fundecseq=andf0undecseq
+    | VAR v0ardec m_vardecseq=andv0ardecseq
+    | IMPLEMENT decs0argseqseq i0mpdec
+    | LOCAL d0ecseq_dyn IN m_decseqdyn=d0ecseq_dyn END
+    | m_leteralcode=LITERAL_extcode
+    | srpifkind guad0ec_dyn
+    | SRPINCLUDE m_include=LITERAL_string
+    ;
+
+
+      
+d0ecseq_sta:
+    d0ecseq_sta_rev
+    ;
+
+d0ecseq_sta_rev:
+    {d0ecseq_sta_rev}(m_d0ec_sta+=d0ec_sta  semicolonseq)* 
+;
+
+semicolonseq:
+    SEMICOLON *;
 	
-Greeting:
-	'Hello' name=ID '!';
+d0ec_sta:
+    m_d0ec=d0ec
+    | name=dcstkind// fun
+      m_tmparg=d0ecargseq  // {n: type}
+      m_d0cstdec=d0cstdec   // foo {k: int} (x: int k):<fun> int = "xxx"
+      m_seq=andd0cstdecseq  // 
+    | {literal_extcode} m_extcode=LITERAL_extcode
+    | srpifkind guad0ec_sta  // #ifdef X #then ... #elif ... #else ... #endif
+    | SRPINCLUDE name=LITERAL_string
+    | LOCAL m_local=d0ecseq_sta IN m_body=d0ecseq_sta END
+    ;
+
+guad0ec_sta returns guad0ec_sta:
+    m_cond=e0xp srpthenopt m_then=d0ecseq_sta
+        (((SRPELSE m_else=d0ecseq_sta)? SRPENDIF)
+         |srpelifkind guad0ec_sta
+        )
+    ;
+
+srpelifkind:
+    SRPELIF  // #elif
+    | SRPELIFDEF  // #elifdef
+    | SRPELIFNDEF  // #elifndef
+    ;
+
+srpthenopt: SRPTHEN?;
+
+srpifkind:
+    SRPIF  // #if
+    | SRPIFDEF // #ifdef
+    | SRPIFNDEF  // #ifndef
+    ;
+
+d0cstdec: 
+    di0de  // list_insert
+    m_d0argseq=d0argseq  // {x: int} (x: int)
+    colonwith  // :<fun>
+    m_s0exp=s0exp  // int
+    extnamopt  // = "foo"
+    ;
+
+extnamopt: (EQ LITERAL_string)?;
+
+colonwith:
+    COLON  // :
+    | COLONLTGT  // :<>
+    | COLONLT e0fftagseq GT  // :<fun>
+    ;
+    
+d0argseq: {d0argseq}(m_args+=d0arg)*;
+
+d0arg:
+    m_pi0de=pi0de
+    | m_sta=d0arg_sta
+    | m_dyn=d0arg_dyn
+    ;
+
+d0arg_dyn: LPAREN m_p0argseq=p0argseq (BAR p0argseq)? RPAREN
+	;
+	
+d0arg_sta: LBRACE m_s0quaseq=s0quaseq RBRACE
+    ;
+	
+p0argseq: {p0argseq}(m_first=p0arg m_p0argseqseq_t=commap0argseq)?;
+
+commap0argseq: {commap0argseq}(COMMA m_commaseq+=p0arg)*;
+
+p0arg:
+    m_pi0de=pi0de
+    | pi0de COLON s0exp
+    ;
+
+d0ecargseq: {d0ecargseq}(m_seq_t+=d0ecarg)*;
+
+d0ecarg: {d0ecarg}LBRACE m_s0quaseq=s0quaseq RBRACE;
+
+dcstkind:
+    FUN  // fun
+    | VAL  // val
+    | CASTFN  // castfn
+    | PRAXI  // praxi
+    | PRFUN  // prfun
+    | PRVAL  // prval
+    ;
+
+d0ec: 
+    INFIX m_p0rec=p0rec i0deseq
+    | INFIXL m_p0rec=p0rec i0deseq
+    | INFIXR m_p0rec=p0rec i0deseq
+    | PREFIX m_p0rec=p0rec i0deseq
+    | POSTFIX m_p0rec=p0rec i0deseq
+    | NONFIX m_i0deseq=i0deseq
+    | SYMINTR m_i0deseq=i0deseq
+    | SRPUNDEF m_i0de=i0de  // #undef i0de
+    | SRPDEFINE m_i0de=i0de e0xpopt  // #define
+    | SRPASSERT m_e0xp=e0xp  // #assert
+    | SRPERROR m_e0xp=e0xp  // #error
+    | SRPPRINT m_e0xp=e0xp  // #print
+    | SORTDEF s0rtdef m_sortdef=ands0rtdefseq  // sortdef x = y
+    | DATASORT m_d0atsrtdec=d0atsrtdec andd0atsrtdecseq  // datasort
+    | DATAPARASORT m_d0atsrtdec=d0atsrtdec andd0atsrtdecseq
+    | abskind s0tacon m_abskind=ands0taconseq  // absviewtype xxptr (l: addr)
+    | STA m_s0tacst=s0tacst ands0tacstseq
+    | STAVAR m_s0tavar=s0tavar ands0tavarseq
+    | stadefkind s0expdef m_seq_stadefkind=ands0expdefseq  // typedef T (int n) = [k: int | k > n] int k
+    | ASSUME m_s0asdec=s0aspdec  // assume T = int
+    | datakind d0atdec m_datatype=andd0atdecseq m_opt=s0expdefseqopt  
+    | EXCEPTION e0xndec m_exception=ande0xndecseq
+    | CLASSDEC m_si0de=si0de (COLON s0exp)?
+    | OVERLOAD m_di0de=di0de WITH dqi0de
+    | OVERLOAD LBRACKET RBRACKET WITH m_dqi0de=dqi0de
+    | MACDEF m0acdef m_seq_t=andm0acdefseq
+    | MACDEF REC m0acdef m_seq_t=andm0acdefseq
+    | MACRODEF m0acdef m_seq_t=andm0acdefseq
+    | MACRODEF REC m0acdef m_seq_t=andm0acdefseq
+    | DYNLOAD m_dyn=LITERAL_string
+    | STALOAD m_sta=LITERAL_string
+    | STALOAD stai0de EQ m_sta=LITERAL_string
+    ;
+
+stai0de: ALNUMRIC_IDENTIFIER;
+
+andm0acdefseq: {andm0acdefseq}(AND m_seq_t+=m0acdef)*;
+
+
+m0acdef:
+    di0de m0acargseq EQ d0exp
+    ;
+
+// quite different from the origin due to handle of case
+// origin
+//d0exp ::= 
+//  | atmd0exp argd0expseq
+//  | d0exp ":" s0exp
+//  | ifhead d0exp "then" d0exp
+//  | ifhead d0exp "then" d0exp "else" d0exp
+//  | sifhead s0exp "then" d0exp "else" d0exp
+//  | casehead d0exp "of" c0lauseq
+//  | scasehead s0exp "of" sc0lauseq
+//  | lamkind f0arg1seq colons0expopt funarrow d0exp
+//  | fixkind di0de f0arg1seq colons0expopt funarrow d0exp
+//  | forhead initestpost d0exp
+//  | whilehead atmd0exp d0exp
+//  | "$raise" d0exp
+//  | tryhead d0expsemiseq0 "with" c0lauseq
+//  | d0exp "where" "{" d0ecseq_dyn "}"
+d0exp: 
+    d0expbase 
+    | d0expcase dcase=d0expgo
+    | s0expcase scase=s0expgo
+    | t0exptry tcase=d0expgo
+    ;
+
+d0expcase: casehead m_d0expcase=d0exp OF
+    ;
+
+s0expcase: scasehead m_s0expcase=s0exp OF
+    ;
+
+t0exptry: tryhead m_t0expcase=d0expsemiseq0 WITH
+    ;
+    
+d0expgo:
+    guap0at (EQGT|EQGTGT|EQSLASHEQGT|EQSLASHEQGTGT) 
+      (a=d0expbase BAR b=d0expgo?
+       | dcase=d0expcase BAR? dgo=d0expgo
+       | scase=s0expcase BAR? sgo=s0expgo
+       | tcase=t0exptry BAR? tgo=d0expgo)
+    ;
+
+s0expgo:
+    sp0at EQGT
+      (a=d0expbase BAR b=s0expgo?
+       | scase=s0expcase BAR? sgo=s0expgo
+       | dcase=d0expcase BAR? dgo=d0expgo
+       | tcase=t0exptry BAR? tgo=d0expgo)
+    ;
+
+sp0at: sqi0de LPAREN s0argseq RPAREN
+    ;
+
+d0expbase:
+    // different from desc
+    argd0expseq1 (COLON m_s0exp=s0exp)? 
+        (WHERE LBRACE m_d0ecseq=d0ecseq_dyn RBRACE)?
+    
+    // very brute solution: must write else
+    | m_dhead=ifhead m_dcond=d0exp THEN m_dthen=d0exp ELSE m_delse=d0exp
+    | m_shead=sifhead m_scond=s0exp THEN m_sthen=d0exp ELSE m_selse=d0exp
+    | lamkind f0arg1seq m_lamopt=colons0expopt funarrow m_lambody=d0exp
+    | fixkind di0de f0arg1seq m_fixopt=colons0expopt funarrow m_fixbody=d0exp
+//  | forhead initestpost d0exp  todo not support now
+//  | whilehead atmd0exp d0exp  todo not support now
+    | DLRRAISE m_raise=d0exp
+    ;
+    
+//sc0lauseq:
+//    (sc0lau)? barsc0lauseq
+//    ;
+
+tryhead: TRY  // try
+    ;
+
+fixkind:
+    FIX  // "fix"
+    | ATFIX  // "@fix"
+    ; /* fixkind */
+
+
+lamkind:
+    LAM  // "lam"
+    | ATLAM  // "@lam"
+    | LLAM  // "llam"
+    | ATLLAM  // "@llam"
+    ;
+
+funarrow:
+    EQGT  // "=>"
+    | EQLTGT  // "=<>"
+    | EQLT e0fftagseq GT  // "=<" e0fftagseq ">"
+    ;
+
+scasehead: SCASE caseinv;
+
+casehead:
+    CASE caseinv
+    | CASEMINUS caseinv
+    | CASEPLUS caseinv
+    ;
+    
+//c0lauseq:
+//    c0lau? m_c0lauseq=barc0lauseq
+//    ;
+//
+//barc0lauseq: (BAR m_barc0lauseq+=c0lau)*;
+//
+//c0lau: guap0at (EQGT|EQGTGT|EQSLASHEQGT|EQSLASHEQGTGT) m_c0laud0exp=d0exp
+//    ;
+
+guap0at: p0at (WHEN m_guap0at=m0atchseq)?
+    ;
+
+m0atchseq: m0atch m_m0atchseq=andm0atchseq;
+
+andm0atchseq: {andm0atchseq}(AND m_andm0atchseq+=m0atch)*;
+
+m0atch: m_m0atchd0exp=d0exp (AS m_m0atch=p0at)?
+    ;
+
+sifhead: SIF caseinv;
+
+ifhead: IF caseinv; // if :[...](...) =>
+
+caseinv: {caseinv}(m_i0nvresstate=i0nvresstate EQGT)?;
+
+i0nvresstate: 
+    {i0nvresstate}(COLON m_i0nresqua=i0nvresqua 
+    	LPAREN m_i0nvresstate=i0nvargseq RPAREN
+    )?
+    ;
+
+i0nvargseq: {i0nvargseq}(m_i0nvarg=i0nvarg m_i0nvargseq=commai0nvargseq)?;
+
+commai0nvargseq: {commai0nvargseq}(COMMA m_i0nvargseq+=i0nvarg)*;
+
+i0nvarg: m_di0d=di0de COLON m_s0exp=s0exp?;
+
+i0nvresqua: {i0nvresqua}(LBRACKET m_s0quaseq=s0quaseq RBRACKET)?;
+
+
+argd0expseq1: (m_argd0expseq+=argd0exp)+;
+
+argd0exp:
+    atmd0exp_argd0exp  // origin is atmd0exp
+    | s0expdarg
+    ; /* argd0exp */
+
+// The following one is a little bit different from atmd0exp in
+// rules "FOLDAT" and "FREEAT"
+atmd0exp_argd0exp: 
+    LITERAL_char {atmd0exp_argd0exp}
+    | LITERAL_float {atmd0exp_argd0exp}
+    | LITERAL_floatsp {atmd0exp_argd0exp}
+    | LITERAL_int {atmd0exp_argd0exp}
+    | LITERAL_intsp {atmd0exp_argd0exp}
+    | LITERAL_string {atmd0exp_argd0exp}
+    | SRPFILENAME {atmd0exp_argd0exp}  // #FILENAME
+    | SRPLOCATION {atmd0exp_argd0exp}  // #LOCATION
+    | di0de {atmd0exp_argd0exp}
+    | OP di0de {atmd0exp_argd0exp}
+    | d0ynq i0de {atmd0exp_argd0exp}
+    | i0dext {atmd0exp_argd0exp}
+    | AMPERSAND {atmd0exp_argd0exp}  // &
+    | BREAK {atmd0exp_argd0exp}  // break
+    | CONTINUE {atmd0exp_argd0exp}  // continue
+    | FOLDAT {atmd0exp_argd0exp} /* remove s0expdargseq*/
+    | FREEAT {atmd0exp_argd0exp} /* remove s0expdargseq*/
+    | VIEWAT {atmd0exp_argd0exp}
+    | DLRDECRYPT {atmd0exp_argd0exp}  // $decrypt
+    | DLRENCRYPT {atmd0exp_argd0exp}  // $encrypt
+    | DLRDELAY {atmd0exp_argd0exp}  // $delay
+    | DLRLDELAY {atmd0exp_argd0exp}  // $ldelay
+    | DLRDYNLOAD {atmd0exp_argd0exp}  // $dynload
+    | DLREFFMASK_ALL {atmd0exp_argd0exp}  // $effmask_all
+    | DLREFFMASK_EXN {atmd0exp_argd0exp}  // $effmask_exn
+    | DLREFFMASK_NTM {atmd0exp_argd0exp}  // $effmask_ntm
+    | DLREFFMASK_REF {atmd0exp_argd0exp}  // $effmask_ref
+    | ATLBRACKET s0exp RBRACKET (LBRACKET m_d0expopt=d0exp RBRACKET)? LPAREN m_seqat=d0expcommaseq RPAREN
+    | DLRARRSZ s0expelt LPAREN m_arr=d0expcommaseq RPAREN  // $arrsz
+    | arrqi0de d0arrind
+    | s0elop l0ab {atmd0exp_argd0exp}
+    | s0elop LBRACKET d0arrind
+    | tmpqi0de t1mps0expseq m_tmp_sq_t=gtlt_t1mps0expseqseq GT  // related to template
+    | HASHLBRACKET s0exparg BAR m_hashlbracketd0xp=d0exp RBRACKET
+    | LPAREN d0expcommabarsemiseq /*origin is d0expcommaseq*/ RPAREN
+    | DLRLST /*$lst_t*/ s0expelt LPAREN m_dlrlst=d0expcommaseq RPAREN
+    | DLRLST_VT /*$lst_vt*/ s0expelt LPAREN m_dlrlst_vt=d0expcommaseq RPAREN
+    | QUOTELBRACKET /*'[*/ d0expcommaseq RBRACKET
+    | BEGIN d0expsemiseq0 END
+//    | LPAREN d0expcommabarsemiseq RPAREN  // origin is d0expsemiseq1 // no need any more
+    | ATLPAREN d0expcommabarseq /* origin is d0expcommaseq*/ RPAREN
+    | QUOTELPAREN /* '( */ d0expcommabarseq /* origin is d0expcommaseq*/ RPAREN
+    | DLRTUP_T LPAREN d0expcommaseq RPAREN
+    | DLRTUP_VT LPAREN d0expcommaseq RPAREN
+//    | "@(" d0expcommaseq "|" d0expcommaseq ")"  // no need
+//    | "'(" d0expcommaseq "|" d0expcommaseq ")"  // no need
+    | ATLBRACE labd0expseq RBRACE
+    | QUOTELBRACE labd0expseq RBRACE
+    | DLRREC_T LBRACE labd0expseq RBRACE
+    | DLRREC_VT LBRACE labd0expseq RBRACE
+    | DLREXTVAL LPAREN s0exp COMMA LITERAL_string RPAREN
+    | PERCENTLPAREN /* %( */ d0exp RPAREN
+    | COMMALPAREN /* ,( */ d0exp RPAREN
+    | BACKQUOTELPAREN /* `( */ d0expsemiseq0 RPAREN
+    | LET d0ecseq_dyn IN m_d0explet=d0expsemiseq0 END
+    | LBRACE d0ecseq_dyn RBRACE
+    ; /* atmd0exp_argd0exp */
+    
+atmd0exp: 
+    m_lichar=LITERAL_char
+    | m_x=LITERAL_float
+    | m_x=LITERAL_floatsp
+    | m_x=LITERAL_int
+    | m_x=LITERAL_intsp
+    | m_x=LITERAL_string
+    | m_x=SRPFILENAME  // #FILENAME
+    | m_x=SRPLOCATION  // #LOCATION
+    | m_x=di0de
+    | OP m_x=di0de
+    | d0ynq m_x=i0de
+    | m_x=i0dext
+    | m_x=AMPERSAND  // &
+    | m_x=BREAK  // break
+    | m_x=CONTINUE  // continue
+    | FOLDAT s0expdargseq
+    | FREEAT s0expdargseq
+    | m_x=VIEWAT
+    | m_x=DLRDECRYPT  // $decrypt
+    | m_x=DLRENCRYPT  // $encrypt
+    | m_x=DLRDELAY  // $delay
+    | m_x=DLRLDELAY  // $ldelay
+    | m_x=DLRDYNLOAD  // $dynload
+    | m_x=DLREFFMASK_ALL  // $effmask_all
+    | m_x=DLREFFMASK_EXN  // $effmask_exn
+    | m_x=DLREFFMASK_NTM  // $effmask_ntm
+    | m_x=DLREFFMASK_REF  // $effmask_ref
+    | ATLBRACKET s0exp RBRACKET (LBRACKET m_d0expopt=d0exp RBRACKET)? LPAREN m_seqat=d0expcommaseq RPAREN
+    | DLRARRSZ s0expelt LPAREN m_arr=d0expcommaseq RPAREN  // $arrsz
+    | arrqi0de d0arrind
+    | m_x=s0elop l0ab
+    | s0elop LBRACKET d0arrind
+    | tmpqi0de t1mps0expseq m_tmp_sq_t=gtlt_t1mps0expseqseq GT  // related to template
+    | HASHLBRACKET s0exparg BAR m_hashlbracketd0xp=d0exp RBRACKET
+    | LPAREN d0expcommabarsemiseq /*origin is d0expcommaseq*/ RPAREN
+    | DLRLST /*$lst_t*/ s0expelt LPAREN m_dlrlst=d0expcommaseq RPAREN
+    | DLRLST_VT /*$lst_vt*/ s0expelt LPAREN m_dlrlst_vt=d0expcommaseq RPAREN
+    | QUOTELBRACKET /*'[*/ d0expcommaseq RBRACKET
+    | BEGIN d0expsemiseq0 END
+//    | LPAREN d0expcommabarsemiseq RPAREN  // origin is d0expsemiseq1 // no need any more
+    | ATLPAREN d0expcommabarseq /* origin is d0expcommaseq*/ RPAREN
+    | QUOTELPAREN /* '( */ d0expcommabarseq /* origin is d0expcommaseq*/ RPAREN
+    | DLRTUP_T LPAREN d0expcommaseq RPAREN
+    | DLRTUP_VT LPAREN d0expcommaseq RPAREN
+//    | "@(" d0expcommaseq "|" d0expcommaseq ")"  // no need
+//    | "'(" d0expcommaseq "|" d0expcommaseq ")"  // no need
+    | ATLBRACE labd0expseq RBRACE
+    | QUOTELBRACE labd0expseq RBRACE
+    | DLRREC_T LBRACE labd0expseq RBRACE
+    | DLRREC_VT LBRACE labd0expseq RBRACE
+    | DLREXTVAL LPAREN s0exp COMMA LITERAL_string RPAREN
+    | PERCENTLPAREN /* %( */ d0exp RPAREN
+    | COMMALPAREN /* ,( */ d0exp RPAREN
+    | BACKQUOTELPAREN /* `( */ d0expsemiseq0 RPAREN
+    | LET d0ecseq_dyn IN m_d0explet=d0expsemiseq0 END
+    | LBRACE d0ecseq_dyn RBRACE
+    ; /* atmd0exp */
+
+d0ecseq_dyn:
+    m_d0ec=d0ec
+    | EXTERN dcstkind m_d0ecargseq=d0ecargseq m_dcstkind=d0cstdec m_dcstkindseq=andd0cstdecseq
+    | EXTERN TYPEDEF LITERAL_string EQ s0exp
+    | EXTERN VAL LITERAL_string EQ d0exp
+    | valkind v0aldec m_valkind=andv0aldecseq
+    | VAL PAR v0aldec m_valkind=andv0aldecseq
+    | VAL REC v0aldec m_valkind=andv0aldecseq
+    | funkind m_d0ecargseq=d0ecargseq m_fundec=f0undec m_fundecseq=andf0undecseq
+    | VAR v0ardec m_v0ardecseq=andv0ardecseq
+    | IMPLEMENT decs0argseqseq i0mpdec
+    | LOCAL m_d0eclocal=d0ecseq_dyn IN m_d0ec_body=d0ecseq_dyn END
+    | m_literalcode=LITERAL_extcode
+    | srpifkind guad0ec_dyn
+    | SRPINCLUDE m_include=LITERAL_string
+    ; /* d0ec_dyn */
+
+guad0ec_dyn:
+    m_cond=e0xp srpthenopt m_then=d0ecseq_dyn
+        (((SRPELSE m_else=d0ecseq_dyn)? SRPENDIF)
+         |srpelifkind guad0ec_dyn
+        )
+    ;
+    
+i0mpdec:
+    impqi0de m_i0mpdec=f0arg2seq m_expopt=colons0expopt EQ m_i0mpdecd0exp=d0exp
+    ;
+
+colons0expopt: {colons0expopt}(COLON m_s0exp=s0exp)?;
+
+f0arg2seq: {f0arg2seq}(m_f0arg2seq+=f0arg2)*;
+
+f0arg2:
+    LBRACE m_s0argseq=s0argseq RBRACE
+    | atmp0at
+    ;
+
+
+impqi0de:
+    dqi0de {impqi0de}
+    | tmpqi0de t1mps0expseq m_impqi0de=gtlt_t1mps0expseqseq GT
+    ;
+
+
+
+decs0argseqseq: (LBRACE decs0argseq RBRACE decs0argseqseq)?;
+
+decs0argseq: (s0arg commadecs0argseq)?;
+
+commadecs0argseq: (COMMA s0arg)*;
+
+
+
+andv0ardecseq: {andv0ardecseq}(AND m_v0ardec+=v0ardec)*;
+
+v0ardec:
+    BANG pi0de v0arwth EQ d0exp
+    | pi0de (v0arwth EQ d0exp
+             | COLON s0exp v0arwth (EQ m_v0ardef_d0exp=d0exp)?
+            )
+; /* v0ardec */
+
+v0arwth: (WITH pi0de)?;
+
+andf0undecseq: {andf0undecseq}(AND m_f0undec+=f0undec)*;
+
+f0undec:
+    name=fi0de args=f0arg1seq (colonwith m_f0undec_s0exp=s0exp)? 
+      EQ m_f0undec_d0xp=d0exp m_f0undef_type=witht0ype
+    ;
+
+fi0de:
+    di0de
+    | OP di0de
+    ;
+    
+f0arg1seq: {f0arg1seq}(m_f0arg1seq+=f0arg1)*
+    ;
+
+f0arg1:{f0arg1}
+    m_f0arg1_sta=f0arg1_sta
+    | m_atmp0at=atmp0at
+    | DOTLT m_s0expseq=s0expseq GTDOT
+    | DOTLTGTDOT{f0arg1}
+    ;
+
+f0arg1_sta:
+	LBRACE m_s0quaseq=s0quaseq RBRACE
+;
+
+funkind:
+    FN  // fn
+    | FNSTAR  // fn*
+    | FUN  // fun
+    | CASTFN  // "castfn
+    | PRFN  // prfn
+    | PRFUN  // prfun
+    ;
+    
+valkind:
+    VAL
+    | VALMINUS
+    | VALPLUS
+    | PRVAL
+    ;
+    
+andv0aldecseq: {andv0aldecseq}(AND m_andv0aldecseq+=v0aldec)*
+    ;
+
+v0aldec: p0at EQ m_d0exp=d0exp m_witht0ype=witht0ype
+    ;
+
+witht0ype:{witht0ype}
+    (WITHPROP m_s0exp=s0exp 
+    | WITHTYPE m_s0exp=s0exp
+    | WITHVIEW m_s0exp=s0exp
+    | WITHVIEWTYPE m_s0exp=s0exp
+    )?;
+
+// Origin is
+//p0at ::= 
+//  | atmp0at argp0atseq
+//  | p0at ":" s0exp
+//  | pi0de "as" p0at
+//  | "!" pi0de "as" p0at
+//  | "~" p0at
+//; /* p0at */
+
+p0at:
+    (pi0de AS|BANG pi0de AS |TILDE)*
+        m_base=atmp0at m_p0atargseq=argp0atseq (COLON s0exp)?
+    ;
+
+
+atmp0at:
+    m_atmp0at_content=LITERAL_char
+    | m_atmp0at_content=LITERAL_int
+    | m_atmp0at_content=LITERAL_float
+    | m_atmp0at_content=LITERAL_string
+    | m_atmp0at_pi0det=pi0de
+    | BANG m_atmp0at_pi0det=pi0de
+    | OP m_atmp0at_pi0det=pi0de
+    | d0ynq m_atmp0at_pi0det=pi0de
+    | LPAREN m_atmp0at_p0atseq=p0atseq RPAREN
+//    | "(" p0atseq "|" p0atseq ")"
+    | QUOTELBRACKET m_atmp0at_p0atseq=p0atseq RBRACKET
+    | ATLPAREN m_atmp0at_p0atseq=p0atseq RPAREN
+    | QUOTELPAREN m_atmp0at_p0atseq=p0atseq RPAREN
+    | ATLBRACE m_labp0atseq=labp0atseq RBRACE
+    | QUOTELBRACE m_labp0atseq=labp0atseq RBRACE
+    | LBRACKET m_atmp0at_s0argseq=s0argseq RBRACKET
+    ; /* atmp0at */
+
+labp0atseq:
+    DOTDOTDOT {labp0atseq}
+    | l0ab EQ p0at m_labp0atsseq=commalabp0atseq
+    ;
+
+commalabp0atseq: {labp0atseq}(COMMA l0ab EQ m_commalabp0atseq+=p0at)*
+    ; /* commalabp0atseq */
+
+p0atseq: {p0atseq}(m_p0at=p0at m_p0atseq=commabarp0atseq /* origin is commap0atseq */)?;
+
+commabarp0atseq: {commabarp0atseq}((COMMA|BAR) m_commabarp0atseq+=p0at)*;
+
+argp0atseq: {argp0atseq}(m_argp0at+=argp0at)*
+    ;
+
+argp0at:{argp0at}
+    m_atmp0at=atmp0at
+    | LBRACE m_s0vararg=s0vararg RBRACE
+    ; /* argp0at */
+
+s0vararg:
+    DOTDOT
+    | DOTDOTDOT
+    | s0argseq
+    ; /* s0vararg */
+
+andd0cstdecseq: {andd0cstdecseq}(AND m_andd0cstdecseq+=d0cstdec)*
+    ;
+
+labd0expseq: {labd0expseq}(l0ab EQ m_d0exp=d0exp m_labd0expseq=commalabd0expseq)?;
+
+commalabd0expseq: {commalabd0expseq}(COMMA l0ab EQ m_commalabd0expseq+=d0exp)*;
+
+
+
+d0expcommabarseq: {d0expcommabarseq}(m_d0exp=d0exp m_d0expcommabarseq=commabard0expseq)?;
+
+commabard0expseq: {commabard0expseq}((COMMA|BAR) m_commabard0expseq+=d0exp)*;
+
+d0expsemiseq0: {d0expsemiseq0}(m_d0exp=d0exp (SEMICOLON m_d0expsemiseq0_rest=d0expsemiseq0)?)?;
+
+d0expcommabarsemiseq: {d0expcommabarsemiseq}(m_d0exp=d0exp m_d0expseq=commabarsemid0expseq)?;
+
+commabarsemid0expseq: {commabarsemid0expseq}((COMMA|BAR|SEMICOLON) m_d0expseq+=d0exp)*;
+
+gtlt_t1mps0expseqseq: {gtlt_t1mps0expseqseq}(GTLT m_x=t1mps0expseq m_seqgtlt=gtlt_t1mps0expseqseq)?;
+
+t1mps0expseq: {t1mps0expseq}(m_first=t1mps0exp m_seqt1mp=commat1mps0expseq)?;
+commat1mps0expseq: {commat1mps0expseq}(COMMA m_seq+=t1mps0exp)*;
+
+// original this should be apps0exp which has some problem
+// due to the fact that si0de contains '>' which conflects with
+// the rule
+// ==================
+// tmpqi0de t1mps0expseq gtlt_t1mps0expseqseq GT  // related to template
+// ==================
+// A naive solution used below simply creates a special t1mpsi0de which
+// doesn't have '<'
+
+t1mps0exp: t1mpapps0exp
+    ;
+    
+t1mpapps0exp:
+    t1mpapps0expA|t1mpapps0expB|t1mpapps0expC
+    ;
+
+t1mpapps0expA:
+    m_atmA=t1mpatms0expA m_t1mpapps0expA=t1mpapps0exp?;
+    
+t1mpapps0expB:
+    m_atmB=t1mpatms0expB m_rest=(t1mpapps0expA|t1mpapps0expB)?;
+
+t1mpapps0expC:
+    m_atmC=t1mpatms0expC m_t1mpapps0expC=t1mpapps0exp?;
+
+t1mpatms0expA:
+    m_content=LITERAL_char  // 'x'
+    | m_content=LITERAL_int  // 23
+    | m_content=LITERAL_intsp  // 23U
+    | m_content=t1mpsi0de  // x
+    | OP m_content=si0de  // op x
+    | s0taq m_content=si0de  // $ABC.x
+    | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
+    | ATLPAREN m_s0expseq=s0expseq RPAREN  // @(x, y, z)  or @(x, y, z | a, b, c)
+    | QUOTELPAREN m_s0expseq=s0expseq RPAREN  // '(x, y, z)  or '(x, y, z | a, b, c)
+    | DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
+    | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
+    | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
+    | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
+    | 'ret_t' LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}  // todo terminal for ret_t
+    | 'ret_vt' LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}  // todo terminal for ret_vt
+    | DLREXTYPE_STRUCT LITERAL_string OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
+//    | (ATLBRACKET s0exp RBRACKET) (LBRACKET s0expseq RBRACKET)+  // removed to atms0expB
+    | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
+    | MINUSLTGT {t1mpatms0expA}
+    | LBRACE m_s0quaseq=s0quaseq RBRACE
+//    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expC
+    | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
+    ;
+t1mpatms0expB:
+    ATLBRACKET m_exp=s0exp RBRACKET (LBRACKET m_seq_arr+=s0expseq RBRACKET)+ // @[x][x, y, z]
+    ;
+    
+t1mpatms0expC:
+    LBRACKET s0quaseq RBRACKET
+    ;
+
+t1mpsi0de:
+    ALNUMRIC_IDENTIFIER |  // x
+    SYMBOLIC_IDENTIFIER |
+    R0EAD |  // r@ead
+    AMPERSAND |  // &
+    BACKSLASH |  // \
+    BANG |  // !
+//    GT |  // >
+    LT |  // <
+    MINUSGT |  // ->
+    TILDE  // ~
+    ; /* t1mpsi0de */
+    
+tmpqi0de:
+    tmpi0de  // foo<
+    | d0ynq tmpi0de  // $A.foo<
+    ;
+
+tmpi0de: IDENTIFIER_tmp;  // TEMPLATE_IDENTIFIER  
+
+
+s0elop:
+    DOT
+    | MINUSGT
+    ;
+
+d0arrind:
+    d0expcommaseq RBRACKET (LBRACKET m_rest=d0arrind)?
+    ;
+
+arrqi0de:
+    arri0de
+    | d0ynq arri0de
+    ; /* arrqi0de */
+
+arri0de: IDENTIFIER_arr;  // ARRAY_IDENTIFIE
+  
+d0expcommaseq: {d0expcommaseq}(m_d0exp=d0exp m_seq=commad0expseq)?;
+
+commad0expseq: {commad0expseq}(COMMA m_seq+=d0exp)*;
+
+s0expelt: {s0expelt}(LBRACE m_s0exp=s0exp RBRACE)?;
+
+s0expdargseq: {s0expdargseq}(m_seq+=s0expdarg)*;
+
+s0expdarg: LBRACE s0exparg RBRACE;
+
+s0exparg:
+    DOTDOT {s0exparg} // ..
+    | DOTDOTDOT {s0exparg}  // ...
+    | s0expseq1
+    ; /* s0exparg */
+
+commas0expseq: {commas0expseq}(COMMA m_s0exp+=s0exp)*;
+
+i0dext:
+    IDENTIFIER_ext  // EXTERNAL_IDENTIFIER
+    | DO  // do
+    | WHILE  // while
+    ;
+
+m0acargseq: m0acarg*;
+
+m0acarg:
+    m0arg
+    | LPAREN m0argseq RPAREN
+    ;
+    
+m0arg: pi0de;
+
+pi0de:
+    ALNUMRIC_IDENTIFIER
+    | SYMBOLIC_IDENTIFIER
+    ;
+
+m0argseq: (m0arg commam0argseq)?;
+
+commam0argseq: (COMMA m0arg)*;
+
+
+dqi0de:
+    di0de
+    | d0ynq di0de
+    ;
+
+d0ynq:
+    i0de_dlr (DOT|COLON)  // $A.
+    | i0de_dlr i0de_dlr COLON  // $A $A :
+    | DOLLAR LITERAL_string (DOT | i0de_dlr COLON)
+    ;
+
+ande0xndecseq: {ande0xndecseq}(AND m_seq+=e0xndec)*;
+
+e0xndec: m_1=conq0uaseq di0de m_2=cona0rgopt;
+
+s0expdefseqopt: {s0expdefseqopt}(WHERE m_s0expdef+=s0expdef m_seq_t+=ands0expdefseq)*;
+
+andd0atdecseq: {andd0atdecseq}(AND m_seq+=d0atdec)*;
+
+d0atdec:
+    si0de (LPAREN d0atargseq RPAREN)? EQ d0atconseq
+    ;
+
+d0atconseq:
+    bard0atconseq
+    | d0atcon m_d0atconseq=bard0atconseq
+    ;
+
+bard0atconseq: {bard0atconseq}(BAR m_seq+=d0atcon)*;
+
+
+d0atcon: 
+    conq0uaseq // {x:int} {xs:ilist} 
+    di0de  // glist_cons
+    m_coni0ndopt=coni0ndopt  // (a, cons (x, xs))
+    m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
+    ;
+
+cona0rgopt: {cona0rgopt}(OF m_s0exp=s0exp)?;
+
+coni0ndopt: {coni0ndopt}(LPAREN m_s0expseq=s0expseq RPAREN)?;
+
+di0de:
+    ALNUMRIC_IDENTIFIER
+    | SYMBOLIC_IDENTIFIER
+    | BACKSLASH  // \
+    | BANG  // !
+    | EQ  // =
+    | GT  // >
+    | GTLT  // ><
+    | LT  // <
+    | TILDE  // ~
+    ;
+    
+conq0uaseq: {conq0uaseq}(LBRACE m_s0quaseq=s0quaseq RBRACE m_rest=conq0uaseq)?;
+
+
+datakind:
+    DATAPROP  // "dataprop"
+    | DATATYPE  // "datatype"
+    | DATAVIEW  // "dataview"
+    | DATAVIEWTYPE  // "dataviewtype"
+    ;
+
+
+
+s0aspdec:
+    sqi0de s0argseqseq colons0rtopt EQ s0exp
+    ;
+
+sqi0de:
+    si0de
+    | s0taq si0de
+    ; /* sqi0de */
+
+
+ands0expdefseq: {ands0expdefseq}(AND m_seq+=s0expdef)*;
+
+s0expdef: si0de s0argseqseq colons0rtopt EQ s0exp
+    ;
+
+stadefkind:
+    STADEF  // "stadef"
+    | PROPDEF  // "propdef"
+    | TYPEDEF  // "typedef"
+    | VIEWDEF  // "viewdef"
+    | VIEWTYPEDEF  // "viewtypedef"
+    ; /* stadefkind */
+
+
+
+ands0tavarseq: (AND s0tavar)*;
+
+s0tavar: si0de COLON s0rt;  // x: int
+
+ands0tacstseq: (AND s0tacst)*;
+
+s0tacst:
+    si0de (LPAREN d0atargseq RPAREN)? COLON s0rt;
+
+
+ands0taconseq: {ands0taconseq}(AND m_seq+=s0tacon)*;
+
+s0tacon:
+    m_si0de=si0de (LPAREN d0atargseq RPAREN)? (EQ s0exp)?
+    ; /* s0tacon */
+
+d0atargseq: (d0atarg commad0atargseq)?;  // x: int, y: char
+
+commad0atargseq: (COMMA d0atarg)*;
+
+d0atarg:
+    s0rtpol
+    | i0de COLON s0rtpol
+    ; /* d0atarg */
+
+s0rtpol:
+    s0rt
+    | PROPMINUS  // "prop-"
+    | PROPPLUS  // "prop+"
+    | TYPEMINUS  // "type-"
+    | TYPEPLUS  // "type+"
+    | T0YPEMINUS  // "t@ype-"
+    | T0YPEPLUS  // "t@ype+"
+    | VIEWMINUS  // "view-"
+    | VIEWPLUS  // "view+"
+    | VIEWTYPEMINUS  // "viewtype-"
+    | VIEWTYPEPLUS  // "viewtype+"
+    | VIEWT0YPEMINUS  // "viewt@ype-"
+    | VIEWT0YPEPLUS  // "viewt@ype+"
+    ;
+
+abskind:
+    ABSPROP  // "absprop"
+    | ABSTYPE  // "abstype"
+    | ABST0YPE  // "abst@ype"
+    | ABSVIEW  // "absview"
+    | ABSVIEWTYPE  // "absviewtype"
+    | ABSVIEWT0YPE  // "absviewt@ype"
+    ; /* abskind */
+
+
+
+andd0atsrtdecseq: (AND d0atsrtdec)*;
+
+d0atsrtdec: i0de EQ d0atsrtconseq;
+
+d0atsrtconseq:
+    bard0atsrtconseq
+    | d0atsrtcon bard0atsrtconseq
+    ; /* d0atsrtconseq */
+
+bard0atsrtconseq: (BAR d0atsrtcon)*;
+
+d0atsrtcon:
+    i0de  // nil
+    | i0de OF s0rt  // cons of (int, ilist)
+    ;
+
+ands0rtdefseq: {ands0rtdefseq}(AND m_seq+=s0rtdef)*;
+
+s0rtdef:
+    s0rtid EQ s0rtext;  // x = y
+
+s0rtext:
+    m_sort=s0rt  // x
+    // {y: int | x > 3; y > 4}
+    | LBRACE si0de COLON s0rtext BAR m_s0exp1+=s0exp ((BAR|SEMICOLON) m_s0exp2+=s0exp)* RBRACE
+    ;
+
+s0exp: 
+    (m_apps0exp=apps0exp (COLON s0rt)?
+    | m_exts0exp=exts0exp (COLON s0rt)?
+    | LAM  s0argseqseq colons0rtopt EQGT m_body=s0exp //  zhiqiang: different from desc
+    )
+    ;
+    
+s0argseqseq:
+     (si0de s0argseqseq
+     | LPAREN s0argseq RPAREN s0argseqseq  // (x: int, y: char)
+     )?
+     ; /* s0argseqseq */
+
+s0argseq: (s0arg commas0argseq)?;
+
+commas0argseq: (COMMA s0arg)*;
+
+
+s0arg: si0de colons0rtopt; /* s0arg */
+
+colons0rtopt: (COLON s0rt)?;
+
+// This is different from desc.
+apps0exp:
+    m_content=(apps0expA|apps0expB|apps0expC)
+    ;
+
+apps0expA:
+    m_Afirst=atms0expA m_Arest=apps0exp?;
+    
+apps0expB:
+    m_Bfirst=atms0expB m_Brest=(apps0expA|apps0expB)?;
+
+apps0expC:
+    m_Cfirst=atms0expC m_Crest=apps0exp?;
+
+
+exts0exp: 
+    DLREXTYPE m_e0exp=LITERAL_string m_app=apps0exp?
+    ;
+
+atms0expA:
+    m_content=LITERAL_char  // 'x'
+    | m_content=LITERAL_int  // 23
+    | m_content=LITERAL_intsp  // 23U
+    | m_atmspexpA_si0de=si0de  // x
+    | OP m_atmspexpA_si0de=si0de  // op x
+    | s0taq m_atmspexpA_si0de=si0de  // $ABC.x
+    | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
+    | ATLPAREN m_s0expseq=s0expseq RPAREN  // @(x, y, z)  or @(x, y, z | a, b, c)
+    | QUOTELPAREN m_s0expseq=s0expseq RPAREN  // '(x, y, z)  or '(x, y, z | a, b, c)
+    | DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
+    | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
+    | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
+    | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
+    | 'ret_t' LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}  // todo terminal for ret_t
+    | 'ret_vt' LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}  // todo terminal for ret_vt
+    | DLREXTYPE_STRUCT LITERAL_string OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
+//    | (ATLBRACKET s0exp RBRACKET) (LBRACKET s0expseq RBRACKET)+  // removed to atms0expB
+    | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
+    | MINUSLTGT {atms0expA}
+    | LBRACE m_s0quaseq=s0quaseq RBRACE
+//    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expC
+    | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
+    ;
+    
+atms0expB:
+    ATLBRACKET s0exp RBRACKET (LBRACKET m_atms0expBseq+=s0expseq RBRACKET)+ // @[x][x, y, z]
+    ;
+    
+atms0expC:
+    LBRACKET s0quaseq RBRACKET
+    ;
+
+//
+
+
+
+s0quaseq: {s0quaseq}(m_s0qua=s0qua ((BAR|SEMICOLON) m_s0quaseq+=s0exp)*)?;
+
+//// The origin is 
+//s0qua ::= 
+//  | apps0exp
+//  | si0de commasi0deseq ":" s0rtext
+//; /* s0qua */
+//// This is not LL, becuase apps0exp can also be si0de
+s0qua:
+    m_content=LITERAL_char  // 'x'
+    | m_content=LITERAL_int  // 23
+    | m_content=LITERAL_intsp  // 23U
+    | m_s0qua_si0de=si0de  (commasi0deseq COLON s0rtext)?  // zhiqiang: different from desc
+    | OP m_s0qua_si0de=si0de  // op x
+    | s0taq m_s0qua_si0de=si0de  // $ABC.x
+    | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
+    | ATLPAREN m_s0expseq=s0expseq RPAREN  // @(x, y, z)  or @(x, y, z | a, b, c)
+    | QUOTELPAREN m_s0expseq=s0expseq RPAREN  // '(x, y, z)  or '(x, y, z | a, b, c)
+    | DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
+    | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
+    | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
+    | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
+    | 'ret_t' LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}  // todo terminal for ret_t
+    | 'ret_vt' LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}  // todo terminal for ret_vt
+    | DLREXTYPE_STRUCT LITERAL_string OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
+    | ATLBRACKET s0exp RBRACKET (LBRACKET m_atlbracketseq+=s0expseq RBRACKET)+  // @[x][x, y, z]
+    | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
+    | MINUSLTGT {s0qua}
+    | LBRACE m_s0quaseq=s0quaseq RBRACE
+    | LBRACKET m_s0quaseq=s0quaseq RBRACKET
+    | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
+    ; 
+    
+commasi0deseq: (COMMA si0de)*;  // , x, y, z
+ 
+ 
+e0fftagseq: (e0fftag commae0fftagseq)?;  // fun, ~x
+
+e0fftag:
+    BANG e0ffid  // !
+  | TILDE e0ffid  // ~
+  | e0ffid  // y
+  | FUN  // fun
+  | LITERAL_int  // 4
+; /* e0fftag */
+
+commae0fftagseq: (COMMA e0fftag)*;
+
+e0ffid: ALNUMRIC_IDENTIFIER;  // x
+
+
+labs0expseq: {commalabs0expseq}(l0ab EQ m_commalabs0expseq=s0exp m_labcommaseq=commalabs0expseq)?;
+
+commalabs0expseq:
+	{commalabs0expseq}(COMMA l0ab EQ m_commalabsrest+=s0exp)*
+	;
+	
+l0ab:
+    i0de
+    | LITERAL_int
+    | LPAREN l0ab RPAREN
+	; /* l0ab */
+
+
+s0expseq: {s0expseq}m_s0expseq1=s0expseq1?;
+
+s0expseq1: s0exp m_s0expseq1rest=commas0expseq  // commabars0expseq
+    ;
+
+BARCOMMA: BAR | COMMA;
+
+commabars0expseq:{commabars0expseq}
+    (BARCOMMA m_commabarseq+=s0exp)*
+    ;
+
+s0taq:  // qualified name
+    i0de_dlr DOT |  // $ABC.
+    i0de_dlr COLON |  // $ATS:
+    DOLLAR LITERAL_string DOT  // $"xxx".
+    ;
+
+si0de:
+    ALNUMRIC_IDENTIFIER |  // x
+    SYMBOLIC_IDENTIFIER |
+    R0EAD |  // r@ead
+    AMPERSAND |  // &
+    BACKSLASH |  // \
+    BANG |  // !
+    GT |  // >
+    LT |  // <
+    MINUSGT |  // ->
+    TILDE  // ~
+    ; /* si0de */
+
+    
+
+s0rt: atms0rt+;
+
+atms0rt:
+    s0rtid |  // x
+    s0rtq s0rtid |  // $AAA.xxx
+    LPAREN s0rtseq RPAREN |  // (x, y, z)
+    ATLPAREN s0rtseq RPAREN  // @(x, y, z)
+    ;
+
+s0rtseq: (s0rt commas0rtseq)?;
+
+commas0rtseq: (COMMA s0rt)*;
+
+s0rtq:  // q means qualified name?
+    i0de_dlr DOT |  // $abc.
+    DOLLAR LITERAL_string DOT  // $"abc".
+    ;
+
+i0de_dlr: IDENTIFIER_dlr;  // starting with $
+    
+        
+
+
+s0rtid:
+    ALNUMRIC_IDENTIFIER | 
+    SYMBOLIC_IDENTIFIER |
+    T0YPE |  // t@ype
+    VIEWT0YPE |  // viewt@ype
+    BACKSLASH |  // \
+    MINUSGT |  // ->
+    MINUSLTGT  // -<>
+    ; /* s0rtid */
+
+
+
+e0xp: atme0xp+;
+
+atme0xp:
+    LITERAL_char |
+    LITERAL_float |
+    LITERAL_int |
+    LITERAL_string |
+    i0de |
+    LPAREN e0xpseq RPAREN
+    PERCENTLPAREN e0xp RPAREN  // %(
+    ;
+
+e0xpseq: (e0xp commae0xpseq)?;
+
+commae0xpseq: (COMMA e0xp)*;
+ 
+e0xpopt: e0xp?;
+
+
+
+
+
+p0rec:
+    (LITERAL_int |  // 3
+    LPAREN i0de RPAREN |  // (x)
+    LPAREN i0de SYMBOLIC_IDENTIFIER LITERAL_int RPAREN  // (x > 4)
+    )*;
+	
+i0deseq:
+    i0de*;
+	
+i0de:
+    ALNUMRIC_IDENTIFIER |
+    SYMBOLIC_IDENTIFIER |
+    AMPERSAND |  // &
+    BACKSLASH |  // \
+    BANG |  // !
+    EQ |  // =
+    GT |  // >
+    GTLT |  // ><
+    LT |  // <
+    MINUSGT  // ->
+    MINUSLTGT  // -<>
+    TILDE  // ~
+    ;
+	
+	
+
+/* \f: \014; \t: 011; \r: \015 */
+// Xtext doesn't support \f
+terminal BLANKS: ('\r'|'\n'|'\t'|' ')+;
+
+terminal AMPERSAND: '&';
+terminal BACKQUOTE: '`';
+terminal BANG: '!';
+terminal BAR: '|';
+terminal COLON: ':';
+terminal DOLLAR: '$';
+terminal DOT: '.';
+terminal EQ: '=';
+terminal HASH: '#';
+terminal TILDE: '~';
+terminal DOTDOT: '..';
+terminal DOTDOTDOT: '...';
+terminal EQGT: '=>';  // implication without decoration
+terminal EQLT: '=<';  // implication decoration
+terminal EQLTGT: '=<>';  // implication with empty decoration
+terminal EQSLASHEQGT: '=/=>';
+terminal EQGTGT: '=>>';
+terminal EQSLASHEQGTGT: '=/=>>';
+terminal LT: '<';
+terminal GT: '>';
+terminal GTLT: '><';
+terminal DOTLT: '.<';
+terminal GTDOT: '>.';  // .<...>. : metric
+terminal DOTLTGTDOT: '.<>.';
+terminal MINUSGT: '->';  // implication
+terminal MINUSLT: '-<';  // -<...> : decorated implication
+terminal MINUSLTGT: '-<>';
+terminal COLONLT: ':<';  // :<...> : decorated implication
+terminal COLONLTGT: ':<>';
+
+terminal ABSPROP: 'absprop';
+terminal ABSTYPE: 'abstype';
+terminal ABSVIEW: 'absview';
+terminal ABSVIEWTYPE: 'absviewtype';
+terminal AND: 'and';
+terminal AS: 'as';
+terminal ASSUME: 'assume';
+terminal BEGIN: 'begin';
+terminal BREAK: 'break';
+terminal CASE: 'case';
+terminal CASTFN: 'castfn';
+terminal CLASSDEC: 'classdec';
+terminal CONTINUE: 'continue';
+terminal DATASORT: 'datasort';
+terminal DATAPARASORT: 'dataparasort';
+terminal DATAPROP: 'dataprop';
+terminal DATATYPE: 'datatype';
+terminal DATAVIEW: 'dataview';
+terminal DATAVIEWTYPE: 'dataviewtype';
+terminal DO: 'do';
+terminal DYN: 'dyn';
+terminal DYNLOAD: 'dynload';
+terminal ELSE: 'else';
+terminal END: 'end';
+terminal EXCEPTION: 'exception';
+terminal EXTERN: 'extern';
+terminal FIX: 'fix';
+terminal FN: 'fn';
+terminal FOR: 'for';
+terminal FUN: 'fun';
+terminal IF: 'if';
+terminal IMPLEMENT: 'implement';
+terminal IN: 'in';
+terminal INFIX: 'infix';
+terminal INFIXL: 'infixl';
+terminal INFIXR: 'infixr';
+terminal LAM: 'lam';
+terminal LET: 'let';
+terminal LLAM: 'llam';
+terminal LOCAL: 'local';
+terminal MACDEF: 'macdef';
+terminal MACRODEF: 'macrodef';
+
+
+terminal NONFIX: 'nonfix';
+terminal OVERLOAD: 'overload';
+terminal PAR: 'par';
+terminal POSTFIX: 'postfix';
+terminal PRAXI: 'praxi';
+terminal PREFIX: 'prefix';
+terminal PRFN: 'prfn';
+terminal PRFUN: 'prfun';
+terminal PRVAL: 'prval';
+terminal OF: 'of';
+terminal OP: 'op';
+terminal PROPDEF: 'propdef';
+terminal REC: 'rec';
+terminal SCASE: 'scase';
+terminal SIF: 'sif';
+terminal SORTDEF: 'sortdef';
+terminal STA: 'sta';
+terminal STADEF: 'stadef';
+terminal STAIF: 'staif';
+terminal STALOAD: 'staload';
+terminal STAVAR: 'stavar';
+
+terminal SYMELIM: 'symelim';
+terminal SYMINTR: 'symintr';
+terminal THEN: 'then';
+terminal TRY: 'try';
+terminal TYPEDEF: 'typedef';
+
+
+terminal VAL: 'val';
+terminal VAR: 'var';
+terminal VIEWDEF: 'viewdef';
+terminal VIEWTYPEDEF: 'viewtypedef';
+terminal WHEN: 'when';
+terminal WHERE: 'where';
+terminal WHILE: 'while';
+terminal WITH: 'with';
+terminal WITHPROP: 'withprop';
+terminal WITHTYPE: 'withtype';
+terminal WITHVIEW: 'withview';
+terminal WITHVIEWTYPE: 'withviewtype';
+//
+terminal DLRARRSZ: '$arrsz';
+terminal DLRDECRYPT: '$decrypt';
+terminal DLRDELAY: '$delay';
+terminal DLRDYNLOAD: '$dynload';
+
+terminal DLREFFMASK_ALL: '$effmask_all';
+terminal DLREFFMASK_EXN: '$effmask_exn';
+terminal DLREFFMASK_NTM: '$effmask_ntm';
+terminal DLREFFMASK_REF: '$effmask_ref';
+terminal DLREXTERN: '$extern';
+terminal DLREXTVAL: '$extval';
+terminal DLREXTYPE: '$extype';
+terminal DLREXTYPE_STRUCT: '$extype_struct';
+terminal DLRENCRYPT: '$encrypt';
+
+
+terminal DLRLDELAY: '$ldelay';  // linear $delay
+terminal DLRLST: '$lst'|'$lst_t';
+terminal DLRLST_VT: '$lst_vt';
+terminal DLRRAISE: '$raise';
+terminal DLRREC_T: '$rec_t';
+terminal DLRREC_VT: '$rec_vt';
+terminal DLRTUP_T: '$tup_t';
+terminal DLRTUP_VT: '$tup_vt';
+terminal DLRTYPEOF: '$typeof';
+
+terminal SRPASSERT: '#assert';
+terminal SRPDEFINE: '#define';
+terminal SRPELIF: '#elif';
+terminal SRPELIFDEF: '#elifdef';
+terminal SRPELIFNDEF: '#elifndef';
+terminal SRPELSE: '#else';
+terminal SRPENDIF: '#endif';
+terminal SRPERROR: '#error';
+terminal SRPIF: '#if';
+terminal SRPIFDEF: '#ifdef';
+terminal SRPIFNDEF: '#ifndef';
+terminal SRPINCLUDE: '#include';
+terminal SRPPRINT: '#print';
+terminal SRPTHEN: '#then';
+terminal SRPUNDEF: '#undef';
+//
+terminal SRPFILENAME: '#FILENAME';
+terminal SRPLOCATION: '#LOCATION';
+terminal SRPCHARCOUNT: '#CHARCOUNT';
+terminal SRPLINECOUNT: '#LINECOUNT';
+
+terminal CASEMINUS: "case-";
+terminal CASEPLUS:  "case+";
+terminal FNSTAR:    "fn*";
+
+// terminal METHODSTAR: "method*";
+//
+terminal FORSTAR:   "for*";
+terminal WHILESTAR: "while*";
+//
+terminal ABST0YPE:      "abst@ype";
+terminal ABSVIEWT0YPE:  "absviewt@ype";
+//
+terminal PROPPLUS:  "prop+";
+terminal PROPMINUS: "prop-";
+terminal TYPEPLUS:  "type+";
+terminal TYPEMINUS: "type-";
+terminal T0YPE:     "t@ype";
+terminal T0YPEPLUS: "t@ype+";
+terminal T0YPEMINUS:"t@ype-";
+//
+terminal VIEWPLUS:      "view+";
+terminal VIEWMINUS: "view-";
+terminal VIEWTYPEPLUS:  "viewtype+";
+terminal VIEWTYPEMINUS: "viewtype-";
+terminal VIEWT0YPE:     "viewt@ype";
+terminal VIEWT0YPEPLUS: "viewt@ype+";
+terminal VIEWT0YPEMINUS:"viewt@ype-";
+//
+terminal VALPLUS: "val+";
+terminal VALMINUS: "val-";
+//
+terminal FOLDAT: "fold@";
+terminal FREEAT: "free@";
+terminal VIEWAT: "view@";
+//
+terminal ATLAM:  "@lam";
+terminal ATLLAM: "@llam";
+terminal ATFIX:  "@fix";
+//
+terminal R0EAD: "r@ead";
+
+terminal COMMENT_REST: '////' ANYOTHER*;
+terminal COMMENT_LINE: '//' !('\n'|'\r')* ('\r'? '\n')?;
+terminal COMMENT_CLIKE: '/*' -> '*/';
+terminal COMMENT0:     '(*' -> '*)';
+
+terminal ALNUMRIC_IDENTIFIER:  // IDENTIFIER_alp in ats_lexer.lats
+    ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")*;
+
+terminal IDENTIFIER_arr: 
+    ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")* '[';
+
+terminal IDENTIFIER_tmp: 
+    ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")* '<';
+
+terminal IDENTIFIER_ext: 
+    ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")* '!';
+
+terminal IDENTIFIER_dlr: 
+    '$' ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")*;
+    
+terminal IDENTIFIER_srp: 
+    '#' ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")*;
+    
+terminal SYMBOLIC_IDENTIFIER:  // IDENTIFIER_sym in ats_lexer.lats
+    ('%'|'&'|'+'|'-'|'.'|'/'|':'|'='|'@'|'~'|'`'|'^'|'|'|'*')+ |
+    (('%'|'&'|'+'|'-'|'.'|'/'|':'|'='|'@'|'~'|'`'|'^'|'|'|'*')* ('<'|'>')
+      ('%'|'&'|'+'|'-'|'.'|'/'|':'|'='|'@'|'~'|'`'|'^'|'|'|'*'|'<'|'>')*) |
+    (('%'|'&'|'+'|'-'|'.'|'/'|':'|'='|'@'|'~'|'`'|'^'|'|'|'*')* ('$'|'#'|'?')
+      ('%'|'&'|'+'|'-'|'.'|'/'|':'|'='|'@'|'~'|'`'|'^'|'|'|'*'|'$'|'#'|'?')*)
+    ;
+    
+terminal LITERAL_int:
+    '~'? (('0'..'9')+ | '0' ('x'|'X') ('0'..'7')+)
+    ;
+
+terminal LITERAL_intsp:
+    LITERAL_int ('l'|'L'|'u'|'U')+;
+
+terminal LITERAL_float:
+    (('0'..'9')+ ('e'|'E')('+'|'-')? ('0'..'9')+) |
+    (('0'..'9')+ '.' ('0'..'9')* (('e'|'E') ('+'|'-')? ('0'..'9')+)?)
+    ;
+
+terminal LITERAL_floatsp:
+    LITERAL_float ('d'|'D'|'f'|'F'|'l'|'L');
+    
+terminal LPAREN:    '(';
+terminal RPAREN:    ')';
+terminal LBRACKET:  '[';
+terminal RBRACKET:  ']';
+terminal LBRACE:    '{';
+terminal RBRACE:    '}';
+terminal QUOTELPAREN:   "'(";
+terminal QUOTELBRACKET: "'[";
+terminal QUOTELBRACE:   "'{";
+terminal ATLPAREN:  '@(';
+terminal ATLBRACKET:'@[';
+terminal ATLBRACE:  '@{';
+terminal HASHLPAREN:'#(';
+terminal HASHLBRACKET: '#[';
+terminal HASHLBRACE: '#{';
+terminal COMMA: ',';
+terminal SEMICOLON: ';';
+terminal BACKSLASH: '\\';
+terminal BACKQUOTELPAREN: '`(';  // macro syntax
+terminal COMMALPAREN: ',(';  // macro syntax
+terminal PERCENTLPAREN: '%(';  // macro syntax
+  
+// todo: add support for escape number
+terminal LITERAL_string:
+    '"' ( '\\' ('n'|'t'|'v'|'b'|'r'|'f'|'a'|'\\'|'?'|'\''|'"'|'('|'['|'{'|('\r'? '\n')) |
+    !('\\'|'"') )* '"';
+
+// todo: add support for escape number
+terminal LITERAL_char:
+	"'" (('\\' .) | !'\\') "'";
+
+// todo cannot handle %{%%}, but seems not important
+terminal LITERAL_extcode:
+    '%{' (('%' (!'}'))|(!'%'))* '%}'
+    ;
+   
+// must place in the end
+terminal ANYOTHER: .;
+
+
