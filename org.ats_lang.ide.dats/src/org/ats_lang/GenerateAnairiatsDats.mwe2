@@ -38,10 +38,9 @@ Workflow {
 
             // generates Java API for the generated EPackages
             fragment = ecore.EcoreGeneratorFragment {
-            // referencedGenModels = "
-            //  platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel,
-            //  platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel
-            // "
+             referencedGenModels = "
+              platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.genmodel
+             "
             }
 
             // Serializer 2.0
@@ -100,7 +99,11 @@ Workflow {
             fragment = contentAssist.JavaBasedContentAssistFragment {}
 
             // generates a more lightweight Antlr parser and lexer tailored for content assist
-            fragment = parser.antlr.XtextAntlrUiGeneratorFragment {}
+            fragment = parser.antlr.XtextAntlrUiGeneratorFragment {
+            	  options = {
+                  classSplitting = true
+              }
+            }
 
             // generates junit test support classes into Generator#pathTestProject
             fragment = junit.Junit4Fragment {}

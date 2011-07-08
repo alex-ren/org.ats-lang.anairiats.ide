@@ -1,9 +1,15 @@
-grammar org.ats_lang.AnairiatsDats with org.eclipse.xtext.common.Terminals
-
+grammar org.ats_lang.AnairiatsDats with org.ats_lang.AnairiatsSats
+ 
 generate anairiatsDats "http://www.ats_lang.org/AnairiatsDats"
 
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';
+import "http://www.ats_lang.org/AnairiatsSats"
+
+
+ 
+dynprogram returns dynprogram:
+    m_dyn=d0ecseq_dyn_rec
+    ;
+     
+d0ecseq_dyn_rec:
+	{d0ecseq_dyn_rec}(m_d0ec_dyn+=d0ecseq_dyn  semicolonseq)* 
+;
