@@ -1,0 +1,10 @@
+Project Name: org.ats_lang.ide.sats
+Language Name: org.ats_lang.AnairiatsSats
+Extension: sats
+
+
+Project Name: org.ats_lang.ide.dats
+Language Name: org.ats_lang.AnairiatsDats
+Extension: dats
+
+doc/ contains some useful information.
