@@ -1,0 +1,17 @@
+1. Install xtext 2.0 to your eclipse. For simplicity, I strongly recommend that you just download a Complete Eclipse Indigo Distribution with Xtext installed in it. (http://www.eclipse.org/Xtext/download/)
+
+2. The repository is on github (https://github.com/alex-ren/org.ats-lang.anairiats.ide).
+Clone the repository to your local disk.
+
+3. Open eclipse, choose "import" -> "Existing projects into workspace" -> "Select root directory" (choose the directory to be the previously created repository) -> "Finish". (You will import 6 projects.)
+
+4. Right click on file org.ats_lang.ide.sats -> src -> org.ats_lang -> GenerateAnairiatsSats.mwe2, choose "Run as MWE2 workflow".
+
+5. Right click on file org.ats_lang.ide.dats -> src -> org.ats_lang -> GenerateAnairiatsDats.mwe2, choose "Run as MWE2 workflow".
+
+6. Right click on project org.ats_lang.ide.dats, choose run as Eclipse Application.
+
+7. In the new eclipse, create a java project (or whatever project). Inside the project, create test1.sats file as well as test2.dats file.
+
+8. Try the new IDE of ATS.
+
