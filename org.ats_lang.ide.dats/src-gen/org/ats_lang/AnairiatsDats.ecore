@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="anairiatsDats"
+    nsURI="http://www.ats_lang.org/AnairiatsDats" nsPrefix="anairiatsDats">
+  <eClassifiers xsi:type="ecore:EClass" name="dynprogram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="m_dyn" eType="ecore:EClass platform:/resource/org.ats_lang.ide.dats/src-gen/org/ats_lang/AnairiatsDats.ecore#//d0ecseq_dyn_rec"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="d0ecseq_dyn_rec">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="m_d0ec_dyn" upperBound="-1"
+        eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ecseq_dyn"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>
