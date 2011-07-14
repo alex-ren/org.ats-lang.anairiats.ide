@@ -15,3 +15,7 @@ Clone the repository to your local disk.
 
 8. Try the new IDE of ATS.
 
+
+Run Configuration -> Argument
+-Xms40m -XX:MaxPermSize=128m -Xmx512m
+
