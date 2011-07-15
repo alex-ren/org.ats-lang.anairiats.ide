@@ -30,4 +30,10 @@ public class AnairiatsDatsUiModule extends org.ats_lang.ui.AbstractAnairiatsDats
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return AtsISemanticHighlightingCalculator.class;
 	}
+	
+//	  @Override
+//	  public Class<? extends ILocationInFileProvider> 
+//	          bindILocationInFileProvider() {
+//	    return MyDslLocationInFileProvider.class;
+//	  }
 }

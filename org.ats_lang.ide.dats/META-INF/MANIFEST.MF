@@ -28,7 +28,7 @@ Export-Package: org.ats_lang,
  org.ats_lang.anairiatsDats,
  org.ats_lang.anairiatsDats.impl,
  org.ats_lang.anairiatsDats.util,
- org.ats_lang.serializer,
  org.ats_lang.parser.antlr,
  org.ats_lang.parser.antlr.internal,
- org.ats_lang.validation
+ org.ats_lang.validation,
+ org.ats_lang.parseTreeConstruction

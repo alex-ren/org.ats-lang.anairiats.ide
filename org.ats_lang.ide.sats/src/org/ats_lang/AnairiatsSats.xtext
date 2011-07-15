@@ -32,10 +32,10 @@ d0ec_dyn:
       m_d0ec=d0ec
     | EXTERN m_kind=dcstkind m_d0ecargseq=d0ecargseq m_d0cstdec=d0cstdec m_decseq=andd0cstdecseq
     | EXTERN TYPEDEF m_literal=LITERAL_string EQ m_s0exp=s0exp
-    | EXTERN VAL m_literal=LITERAL_string EQ m_d0exp=d0exp
+    | EXTERN 'val' m_literal=LITERAL_string EQ m_d0exp=d0exp
     | m_valkind=valkind m_v0aldec=v0aldec m_v0alseq=andv0aldecseq
-    | VAL PAR m_v0aldec=v0aldec m_valpar=andv0aldecseq
-    | VAL REC m_v0aldec=v0aldec m_valrec=andv0aldecseq
+    | 'val' PAR m_v0aldec=v0aldec m_valpar=andv0aldecseq
+    | 'val' REC m_v0aldec=v0aldec m_valrec=andv0aldecseq
     | funkind m_d0ecargseq=d0ecargseq m_fundec=f0undec m_fundecseq=andf0undecseq
     | VAR m_v0ardec=v0ardec m_vardecseq=andv0ardecseq
     | IMPLEMENT m_seqseq=decs0argseqseq m_i0mpdec=i0mpdec
@@ -48,11 +48,8 @@ d0ec_dyn:
 
       
 d0ecseq_sta:
-    'd0ecseq_sat'
-    // todo
+    m_d0ecseq_sta_rev=d0ecseq_sta_rev
     ;
-//    m_d0ecseq_sta_rev=d0ecseq_sta_rev
-//    ;
 
 d0ecseq_sta_rev:
     {d0ecseq_sta_rev}(m_d0ec_sta+=d0ec_sta  semicolonseq)* 
@@ -95,15 +92,12 @@ srpifkind:
     ;
 
 d0cstdec: 
-	'd0cstdec'
-	// todo
-;
-//    m_name=di0de  // list_insert
-//    m_d0argseq=d0argseq  // {x: int} (x: int)
-//    m_col=colonwith  // :<fun>
-//    m_s0exp=s0exp  // int
-//    m_extname=extnamopt  // = "foo"
-//    ;
+    name=di0de  // list_insert
+    m_d0argseq=d0argseq  // {x: int} (x: int)
+    m_col=colonwith  // :<fun>
+    m_s0exp=s0exp  // int
+    m_extname=extnamopt  // = "foo"
+    ;
 
 extnamopt: {extnamopt}(EQ m_str=LITERAL_string)?;
 
@@ -124,7 +118,7 @@ d0arg:
 d0arg_dyn: LPAREN m_p0argseq=p0argseq (BAR m_opt=p0argseq)? RPAREN
 	;
 	
-d0arg_sta: 'xx' // LBRACE {d0arg_sta}m_s0quaseq=s0quaseq RBRACE todo
+d0arg_sta: LBRACE {d0arg_sta}m_s0quaseq=s0quaseq RBRACE
     ;
 	
 p0argseq: {p0argseq}(m_first=p0arg m_p0argseqseq_t=commap0argseq)?;
@@ -139,11 +133,8 @@ p0arg:
 d0ecargseq: {d0ecargseq}(m_seq_t+=d0ecarg)*;
 
 d0ecarg: 
-	'd0ecarg'
-	// todo
-	;
-//	LBRACE {d0ecarg} m_s0quaseq=s0quaseq RBRACE
-//;
+	LBRACE {d0ecarg} m_s0quaseq=s0quaseq RBRACE
+;
 
 //enum dcstkind:
 //    FUN='efun'  // fun
@@ -154,15 +145,13 @@ d0ecarg:
 //    | PRVAL='eprval'  // prval
 //    ;
 
-dcstkind:
-	m_kind=(
-    FUN  // fun
-    | VAL  // val
-    | CASTFN  // castfn
-    | PRAXI  // praxi
-    | PRFUN  // prfun
-    | PRVAL  // prval
-    )
+enum dcstkind:
+    FUN='fun'  // fun
+    | VAL='val'  // val
+    | CASTFN='castfn'  // castfn
+    | PRAXI='praxi'  // praxi
+    | PRFUN='prfun'  // prfun
+    | PRVAL='prval'  // prval
     ;
 
 d0ec: 
@@ -206,12 +195,8 @@ andm0acdefseq: {andm0acdefseq}(AND m_seq_t+=m0acdef)*;
 
 
 m0acdef:
-    'm0acdef' 
-    // todo
+    m_dipde=di0de m_mac=m0acargseq EQ m_d0exp=d0exp
     ;
-//    
-//    m_dipde=di0de m_mac=m0acargseq EQ m_d0exp=d0exp
-//    ;
 
 // quite different from the origin due to handle of case
 // origin
@@ -231,30 +216,21 @@ m0acdef:
 //  | tryhead d0expsemiseq0 "with" c0lauseq
 //  | d0exp "where" "{" d0ecseq_dyn "}"
 d0exp: 
-	'xxx'
-	//todo
-;
-//    m_base=d0expbase 
-//    | m_d=d0expcase dcase=d0expgo
-//    | m_s=s0expcase scase=s0expgo
-//    | m_t=t0exptry tcase=d0expgo
-//    ;
+    m_base=d0expbase 
+    | m_d=d0expcase dcase=d0expgo
+    | m_s=s0expcase scase=s0expgo
+    | m_t=t0exptry tcase=d0expgo
+    ;
 
 d0expcase: 
-	'd0expcase'
-	// todo
-	;
-//	m_ch=casehead m_d0expcase=d0exp OF
-//    ;
+	m_ch=casehead m_d0expcase=d0exp OF
+    ;
 
 s0expcase: 
-	's0expcase'
-	// todo
-	;
-//	m_sh=scasehead m_s0expcase=s0exp OF
-//    ;
+	m_sh=scasehead m_s0expcase=s0exp OF
+    ;
 
-t0exptry: tryhead /* todo m_t0expcase=d0expsemiseq0*/ WITH
+t0exptry: tryhead m_t0expcase=d0expsemiseq0 WITH
     ;
     
 d0expgo:
@@ -273,7 +249,7 @@ s0expgo:
        | m_tcase=t0exptry BAR? m_tgo=d0expgo)
     ;
 
-sp0at: 'sp0at'  // todo m_sqi0de=sqi0de LPAREN m_seq=s0argseq RPAREN
+sp0at: m_sqi0de=sqi0de LPAREN m_seq=s0argseq RPAREN
     ;
 
 d0expbase:
@@ -337,11 +313,8 @@ guap0at: m_p0at=p0at (WHEN m_guap0at=m0atchseq)?
     ;
 
 m0atchseq: 
-	'm0atchseq'
-	// todo
-	;
-//	m_match=m0atch m_m0atchseq=andm0atchseq
-//;
+	m_match=m0atch m_m0atchseq=andm0atchseq
+;
 
 andm0atchseq: {andm0atchseq}(AND m_andm0atchseq+=m0atch)*;
 
@@ -500,10 +473,10 @@ d0ecseq_dyn:
     m_d0ec=d0ec
     | EXTERN m_kind=dcstkind m_d0ecargseq=d0ecargseq m_dcstkind=d0cstdec m_dcstkindseq=andd0cstdecseq
     | EXTERN TYPEDEF m_str=LITERAL_string EQ m_s0exp=s0exp
-    | EXTERN VAL m_str=LITERAL_string EQ m_d0exp=d0exp
+    | EXTERN 'val' m_str=LITERAL_string EQ m_d0exp=d0exp
     | valkind m_v0aldec=v0aldec m_valkind=andv0aldecseq
-    | VAL PAR m_v0aldec=v0aldec m_valkind=andv0aldecseq
-    | VAL REC m_v0aldec=v0aldec m_valkind=andv0aldecseq
+    | 'val' PAR m_v0aldec=v0aldec m_valkind=andv0aldecseq
+    | 'val' REC m_v0aldec=v0aldec m_valkind=andv0aldecseq
     | funkind m_d0ecargseq=d0ecargseq m_fundec=f0undec m_fundecseq=andf0undecseq
     | VAR m_v0ardec=v0ardec m_v0ardecseq=andv0ardecseq
     | IMPLEMENT m_decseqseq=decs0argseqseq m_i0mpdec=i0mpdec
@@ -521,11 +494,8 @@ guad0ec_dyn:
     ;
     
 i0mpdec:
-    'i0mpdec'
-    // todo
+    m_imp=impqi0de m_i0mpdec=f0arg2seq m_expopt=colons0expopt EQ m_i0mpdecd0exp=d0exp
     ;
-//    m_imp=impqi0de m_i0mpdec=f0arg2seq m_expopt=colons0expopt EQ m_i0mpdecd0exp=d0exp
-//    ;
 
 colons0expopt: {colons0expopt}(COLON m_s0exp=s0exp)?;
 
@@ -538,7 +508,7 @@ f0arg2:
 
 
 impqi0de:
-    m_dqi0de=dqi0de
+    m_dqi0de=[d0cstdec|dqi0de]
     | m_qi0de=tmpqi0de m_t1mpseq=t1mps0expseq m_impqi0de=gtlt_t1mps0expseqseq GT
     ;
 
@@ -586,32 +556,29 @@ f0arg1:{f0arg1}
     ;
 
 f0arg1_sta:
-	'f0arg1_sta'
-	// todo
-	;
-//	LBRACE m_s0quaseq=s0quaseq RBRACE
-//;
+	LBRACE m_s0quaseq=s0quaseq RBRACE
+;
 
 funkind:
     FN  // fn
     | FNSTAR  // fn*
-    | FUN  // fun
-    | CASTFN  // "castfn
+    | 'fun'  // fun
+    | 'castfn'  // "castfn
     | PRFN  // prfn
-    | PRFUN  // prfun
+    | 'prfun'  // prfun
     ;
     
 valkind:
-    VAL
+    'val'
     | VALMINUS
     | VALPLUS
-    | PRVAL
+    | 'prval'
     ;
     
 andv0aldecseq: {andv0aldecseq}(AND m_andv0aldecseq+=v0aldec)*
     ;
 
-v0aldec: 'v0aldec'  // todo m_p0at=p0at EQ m_d0exp=d0exp m_witht0ype=witht0ype
+v0aldec: m_p0at=p0at EQ m_d0exp=d0exp m_witht0ype=witht0ype
     ;
 
 witht0ype:{witht0ype}
@@ -728,10 +695,8 @@ t1mpapps0expB:
     m_atmB=t1mpatms0expB m_rest=(t1mpapps0expA|t1mpapps0expB)?;
 
 t1mpapps0expC:
-	't1mpapps0expc'
-	// todo
-;
-//    m_atmC=t1mpatms0expc m_t1mpapps0expC=t1mpapps0exp?;
+    m_atmC=t1mpatms0expc m_t1mpapps0expC=t1mpapps0exp?
+    ;
 
 t1mpatms0expA:
     m_content=LITERAL_char  // 'x'
@@ -747,8 +712,8 @@ t1mpatms0expA:
     | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
     | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
     | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
-    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}  // todo terminal for ret_t
-    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}  // todo terminal for ret_vt
+    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
+    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
     | DLREXTYPE_STRUCT LITERAL_string OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
 //    | (ATLBRACKET s0exp RBRACKET) (LBRACKET s0expseq RBRACKET)+  // removed to atms0expB
     | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
@@ -762,11 +727,8 @@ t1mpatms0expB:
     ;
     
 t1mpatms0expc:
-    't1mpatms0expc'
-    // todo
+    LBRACKET m_s0quaseq=s0quaseq RBRACKET
     ;
-//    //LBRACKET m_s0quaseq=s0quaseq RBRACKET
-//    ;
 
 t1mpsi0de:
     ALNUMRIC_IDENTIFIER |  // x
@@ -849,23 +811,20 @@ commam0argseq: {commam0argseq}(COMMA m_args+=m0arg)*;
 
 
 dqi0de:
-    m_di0de=di0de
-    | m_d0ynq=d0ynq m_di0de=di0de
+    di0de
+    | d0ynq di0de
     ;
 
 d0ynq:
-    m_1=i0de_dlr (DOT|COLON)  // $A.
-    | m_1=i0de_dlr m_2=i0de_dlr COLON  // $A $A :
-    | DOLLAR m_literal=LITERAL_string (DOT | i0de_dlr COLON)
+    i0de_dlr (DOT|COLON)  // $A.
+    | i0de_dlr i0de_dlr COLON  // $A $A :
+    | DOLLAR LITERAL_string (DOT | i0de_dlr COLON)
     ;
 
 ande0xndecseq: {ande0xndecseq}(AND m_seq+=e0xndec)*;
 
 e0xndec: 
-	'e0xndec'
-	// todo
-	;
-//m_1=conq0uaseq m_di0de=di0de m_2=cona0rgopt;
+    m_1=conq0uaseq m_di0de=di0de m_2=cona0rgopt;
 
 s0expdefseqopt: {s0expdefseqopt}(WHERE m_s0expdef+=s0expdef m_seq_t+=ands0expdefseq)*;
 
@@ -890,12 +849,9 @@ bard0atconseq: {bard0atconseq}(BAR m_seq+=d0atcon)*;
 //    m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
 //    ;
 d0atcon:
-	'd0atcon'
-	// todo
-;
-//	{d0atcon}
-//    myconq=conq0uaseq m_di0de=di0de m_coni0ndopt=coni0ndopt m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
-//    ;
+	{d0atcon}
+    myconq=conq0uaseq m_di0de=di0de m_coni0ndopt=coni0ndopt m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
+    ;
     
 cona0rgopt: {cona0rgopt}(OF m_exp=s0exp)?;
 
@@ -926,12 +882,8 @@ datakind:
 
 
 s0aspdec:
-    's0aspdec'
-    // todo
+    m_sqi0de=sqi0de m_s0args=s0argseqseq colons0rtopt EQ m_s0exp=s0exp
     ;
-    
-//    m_sqi0de=sqi0de m_s0args=s0argseqseq colons0rtopt EQ m_s0exp=s0exp
-//    ;
 
 sqi0de:
     m_si0de=si0de
@@ -942,11 +894,8 @@ sqi0de:
 ands0expdefseq: {ands0expdefseq}(AND m_seq+=s0expdef)*;
 
 s0expdef: 
-	's0expdef'
-	// todo
-	;
-//	si0de m_seq=s0argseqseq colons0rtopt EQ m_exp=s0exp
-//    ;
+	si0de m_seq=s0argseqseq colons0rtopt EQ m_exp=s0exp
+    ;
 
 stadefkind:
     STADEF  // "stadef"
@@ -1013,11 +962,8 @@ abskind:
 andd0atsrtdecseq: {andd0atsrtdecseq}(AND myseq+=d0atsrtdec)*;
 
 d0atsrtdec: 
-	'd0atsrtdec'
-	// todo
-	;
-//	m_d0de=i0de EQ m_seq=d0atsrtconseq
-//;
+	m_d0de=i0de EQ m_seq=d0atsrtconseq
+;
 
 d0atsrtconseq:
     m_seq=bard0atsrtconseq
@@ -1034,7 +980,7 @@ d0atsrtcon:
 ands0rtdefseq: {ands0rtdefseq}(AND m_seq+=s0rtdef)*;
 
 s0rtdef:
-    's0rtdef'  // todo m_id=s0rtid EQ m_ext=s0rtext;  // x = y
+    m_id=s0rtid EQ m_ext=s0rtext  // x = y
     ;
 
 s0rtext:
@@ -1044,14 +990,11 @@ s0rtext:
     ;
 
 s0exp: 
-	'yy'
-	// todo
-;
-//    (m_apps0exp=apps0exp (COLON s0rt)?
-//    | m_exts0exp=exts0exp (COLON s0rt)?
-//    | LAM  m_seq=s0argseqseq colons0rtopt EQGT m_body=s0exp //  zhiqiang: different from desc
-//    )
-//    ;
+    (m_apps0exp=apps0exp (COLON s0rt)?
+    | m_exts0exp=exts0exp (COLON s0rt)?
+    | LAM  m_seq=s0argseqseq colons0rtopt EQGT m_body=s0exp //  zhiqiang: different from desc
+    )
+    ;
     
 s0argseqseq:{s0argseqseq}
      (m_si0de=si0de m_seq=s0argseqseq
@@ -1065,11 +1008,8 @@ commas0argseq: {commas0argseq}(COMMA m_s0args+=s0arg)*;
 
 
 s0arg: 
-	's0arg'
-	// todo
-	;
-//	m_si0de=si0de m_s0rt=colons0rtopt
-//; /* s0arg */
+	m_si0de=si0de m_s0rt=colons0rtopt
+; /* s0arg */
 
 colons0rtopt: (COLON s0rt)?;
 
@@ -1106,8 +1046,8 @@ atms0expA:
     | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
     | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
     | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
-    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}  // todo terminal for ret_t
-    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}  // todo terminal for ret_vt
+    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
+    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
     | DLREXTYPE_STRUCT m_literal=LITERAL_string OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
 //    | (ATLBRACKET s0exp RBRACKET) (LBRACKET s0expseq RBRACKET)+  // removed to atms0expB
     | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
@@ -1122,7 +1062,7 @@ atms0expB:
     ;
     
 atms0expc:
-    'xx'  // m_bra=LBRACKET m_seq=s0quaseq RBRACKET  // todo
+    m_bra=LBRACKET m_seq=s0quaseq RBRACKET
     ;
 
 //
@@ -1151,8 +1091,8 @@ s0qua:
     | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
     | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
     | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
-    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}  // todo terminal for ret_t
-    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}  // todo terminal for ret_vt
+    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
+    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
     | DLREXTYPE_STRUCT LITERAL_string OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
     | ATLBRACKET m_s0exp=s0exp RBRACKET (LBRACKET m_atlbracketseq+=s0expseq RBRACKET)+  // @[x][x, y, z]
     | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
@@ -1171,7 +1111,7 @@ e0fftag:
     BANG e0ffid  // !
   | TILDE e0ffid  // ~
   | e0ffid  // y
-  | FUN  // fun
+  | 'fun'  // fun
   | LITERAL_int  // 4
 ; /* e0fftag */
 
@@ -1195,7 +1135,7 @@ l0ab:
 
 s0expseq: {s0expseq}m_s0expseq1=s0expseq1?;
 
-s0expseq1: 's0expseq1'  // todo m_ele=s0exp m_rest=commas0expseq  // commabars0expseq
+s0expseq1: m_ele=s0exp m_rest=commas0expseq  // commabars0expseq
     ;
 
 BARCOMMA: BAR | COMMA;
@@ -1352,7 +1292,7 @@ terminal ASSUME: 'assume';
 terminal BEGIN: 'begin';
 terminal BREAK: 'break';
 terminal CASE: 'case';
-terminal CASTFN: 'castfn';
+//terminal CASTFN: 'castfn';
 terminal CLASSDEC: 'classdec';
 terminal CONTINUE: 'continue';
 terminal DATASORT: 'datasort';
@@ -1371,7 +1311,7 @@ terminal EXTERN: 'extern';
 terminal FIX: 'fix';
 terminal FN: 'fn';
 terminal FOR: 'for';
-terminal FUN: 'fun';
+//terminal FUN: 'fun';
 terminal IF: 'if';
 terminal IMPLEMENT: 'implement';
 terminal IN: 'in';
@@ -1390,11 +1330,11 @@ terminal NONFIX: 'nonfix';
 terminal OVERLOAD: 'overload';
 terminal PAR: 'par';
 terminal POSTFIX: 'postfix';
-terminal PRAXI: 'praxi';
+//terminal PRAXI: 'praxi';
 terminal PREFIX: 'prefix';
 terminal PRFN: 'prfn';
-terminal PRFUN: 'prfun';
-terminal PRVAL: 'prval';
+//terminal PRFUN: 'prfun';
+//terminal PRVAL: 'prval';
 terminal OF: 'of';
 terminal OP: 'op';
 terminal PROPDEF: 'propdef';
@@ -1419,7 +1359,7 @@ terminal RET_T: 'ret_t';
 terminal RET_VT: 'ret_vt';
 
 
-terminal VAL: 'val';
+//terminal VAL: 'val';
 terminal VAR: 'var';
 terminal VIEWDEF: 'viewdef';
 terminal VIEWTYPEDEF: 'viewtypedef';

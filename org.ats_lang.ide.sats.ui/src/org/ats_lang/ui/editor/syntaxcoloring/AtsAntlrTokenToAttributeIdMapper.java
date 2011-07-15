@@ -6,8 +6,11 @@ public class AtsAntlrTokenToAttributeIdMapper extends
 		DefaultAntlrTokenToAttributeIdMapper {
 	@Override
 	protected String calculateId(String tokenName, int tokenType) {
-//		System.out.println("tokenName is " + tokenName);
-		if("RULE_FUN".equals(tokenName)) {
+		// System.out.println("tokenName is " + tokenName);
+		if("'fun'".equals(tokenName)) {
+			return AtsIHighlightingConfiguration.KEYWORD_ID;
+		}
+		if("'prfun'".equals(tokenName)) {
 			return AtsIHighlightingConfiguration.KEYWORD_ID;
 		}
 		if("RULE_COMMENT_REST".equals(tokenName)) {

@@ -44,7 +44,10 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 		
 		dcstkind m_kind = ele.getM_kind();
 		if (m_kind != null) {
-			return m_kind.getM_kind();
+			System.out.println("literal is " + m_kind.getLiteral());
+			System.out.println("name is " + m_kind.getName());
+			System.out.println(m_kind.toString());
+			return m_kind.toString();
 		}
 		
 		return "d0ec_sta";
@@ -65,7 +68,7 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	String text(dcstkind ele) {
-		return ele.getM_kind();
+		return ele.toString();
 	}
 
 	String text(d0ecargseq ele) {
