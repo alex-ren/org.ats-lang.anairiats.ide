@@ -45,9 +45,11 @@ Workflow {
             }
 
             // Serializer 2.0
+            // commented out by aren@bu.edu
             // fragment = serializer.SerializerFragment {}
             
             // the serialization component (1.0)
+            // uncommented by aren@bu.edu
             fragment = parseTreeConstructor.ParseTreeConstructorFragment {}
 
             // a custom ResourceFactory for use with EMF
@@ -65,7 +67,7 @@ Workflow {
             // java-based API for validation
             fragment = validation.JavaValidatorFragment {
                 composedCheck = "org.eclipse.xtext.validation.ImportUriValidator"
-                composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
+                // composedCheck = "org.eclipse.xtext.validation.NamesAreUniqueValidator"
             }
 
             // scoping and exporting API
@@ -73,7 +75,8 @@ Workflow {
             // fragment = exporting.SimpleNamesFragment {}
 
             // scoping and exporting API
-            fragment = scoping.ImportNamespacesScopingFragment {}
+            // fragment = scoping.ImportNamespacesScopingFragment {}
+            fragment = scoping.AtsGlobalScopingFragment {}
             fragment = exporting.QualifiedNamesFragment {}
             fragment = builder.BuilderIntegrationFragment {}
 
@@ -101,6 +104,7 @@ Workflow {
 
             // generates a more lightweight Antlr parser and lexer tailored for content assist
             fragment = parser.antlr.XtextAntlrUiGeneratorFragment {
+            	// added by aren@bu.edu
             	  options = {
                   classSplitting = true
               }
@@ -116,7 +120,7 @@ Workflow {
             // }
 
             // provides the necessary bindings for java types integration
-            fragment = types.TypesGeneratorFragment {}
+            // fragment = types.TypesGeneratorFragment {}
 
             // generates the required bindings only if the grammar inherits from Xbase
             fragment = xbase.XbaseGeneratorFragment {}

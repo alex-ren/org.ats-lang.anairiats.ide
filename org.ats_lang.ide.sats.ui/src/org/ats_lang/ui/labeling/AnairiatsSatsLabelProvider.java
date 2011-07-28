@@ -3,14 +3,8 @@
  */
 package org.ats_lang.ui.labeling;
 
-import org.ats_lang.anairiatsSats.andd0cstdecseq;
-import org.ats_lang.anairiatsSats.d0cstdec;
-import org.ats_lang.anairiatsSats.d0ec_sta;
-import org.ats_lang.anairiatsSats.d0ecargseq;
-import org.ats_lang.anairiatsSats.d0ecseq_sta;
-import org.ats_lang.anairiatsSats.d0ecseq_sta_rev;
-import org.ats_lang.anairiatsSats.dcstkind;
-import org.ats_lang.anairiatsSats.satprogram;
+import org.ats_lang.anairiatsSats.*;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
 
@@ -38,29 +32,43 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	String text(d0ec_sta ele) {
+		// m_d0ec=d0ec
 		if (ele.getM_d0ec() != null) {
-			return "d0ec_sta, d0ec";
+			return "d0ec";
+		}
+		
+		// m_extcode=LITERAL_extcode
+		if (ele.getM_extcode() != null) {
+			return "extcode";
+		}
+		
+		// m_sif=srpifkind m_guad=guad0ec_sta
+		String sif = ele.getM_sif();
+		if (sif != null) {
+			return sif;
+		}
+		
+		// SRPINCLUDE m_include=STRING
+		if (ele.getM_include() != null) {
+			return "#include";
+		}
+		
+		// LOCAL m_local=d0ecseq_sta IN m_body=d0ecseq_sta END
+		if (ele.getM_local() != null) {
+			return "local";
 		}
 		
 		dcstkind m_kind = ele.getM_kind();
 		if (m_kind != null) {
-			System.out.println("literal is " + m_kind.getLiteral());
-			System.out.println("name is " + m_kind.getName());
-			System.out.println(m_kind.toString());
-			return m_kind.toString();
+			System.out.println("literal is " + m_kind.getLiteral());  // fun
+			System.out.println("name is " + m_kind.getName());  // FUN
+			System.out.println(m_kind.toString());  // fun
+			
+			d0cstdec m_d0cstdec = ele.getName();
+			return m_kind.toString() + " " + m_d0cstdec.getName();
 		}
 		
 		return "d0ec_sta";
-		
-//	    m_d0ec=d0ec
-//	    | m_kind=dcstkind// fun
-//	      m_tmparg=d0ecargseq  // {n: type}
-//	      m_d0cstdec=d0cstdec   // foo {k: int} (x: int k):<fun> int = "xxx"
-//	      m_seq=andd0cstdecseq  // 
-//	    | m_extcode=LITERAL_extcode
-//	    | srpifkind guad0ec_sta  // #ifdef X #then ... #elif ... #else ... #endif
-//	    | SRPINCLUDE m_include=LITERAL_string
-//	    | LOCAL m_local=d0ecseq_sta IN m_body=d0ecseq_sta END
 	}
 
 	String text(d0ecseq_sta_rev ele) {
@@ -72,17 +80,101 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	String text(d0ecargseq ele) {
-		return "d0ecargseq";
+		if (ele.getM_seq_t().isEmpty()) {
+			return "template args: d0ecargseq";
+		}
+		else {
+			return "template args: d0ecargseq";
+		}
 	}
 
 	String text(d0cstdec ele) {
-		return "d0cstdec";
+		EObject container = ele.eContainer().eContainer();
+		if (container instanceof d0ec_sta) {
+			String m_kind = ((d0ec_sta)container).getM_kind().toString();
+//			System.out.println("========== " + container.toString());
+			return m_kind + " " + ele.getName();	
+		}
+		return ele.getName().getName();
+
 	}
 
 	String text(andd0cstdecseq ele) {
 		return "andd0cstdecseq";
 	}
+	
+	String text(guad0ec_sta ele) {
+		return "guad0ec_sta";
+	}
+	
+	String text(extnamopt ele) {
+		return "extnamopt";
+	}
+	
+	String text(colonwith ele) {
+//		String m_colon = ele.getM_colon();
+//		if (m_colon != null) {
+//			return m_colon;
+//		}
+//		
+//		
+		return "fun type: colonwith";
+	}
 
+	String text(d0argseq ele) {
+		return "args: d0argseq";
+	}
+
+	String text(d0arg ele) {
+		return "d0arg";
+	}
+
+	String text(d0arg_dyn ele) {
+		return "d0arg_dyn";
+	}
+
+	String text(d0arg_sta ele) {
+		return "d0arg_sta";
+	}
+
+	String text(p0argseq ele) {
+		return "p0argseq";
+	}
+
+	String text(commap0argseq ele) {
+		return "commap0argseq";
+	}
+
+	String text(d0ecarg ele) {
+		return "d0ecarg";
+	}
+
+	String text(s0quaseq ele) {
+		return "s0quaseq";
+	}
+	
+	String text(s0qua ele) {
+		return "s0qua";
+	}
+	
+	String text(s0exp ele) {
+		return "s0exp";
+	}
+	
+	String text(commasi0deseq ele) {
+		return "commasi0deseq";
+	}
+	
+	String text(s0rtext ele) {
+		return "s0rtext";
+	}
+	
+	
+	
+	
+	
+	
+	
 	/*
 	 * //Labels and icons can be computed like this:
 	 * 

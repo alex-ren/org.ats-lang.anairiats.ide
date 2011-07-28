@@ -4,6 +4,8 @@
 package org.ats_lang;
 
 import org.ats_lang.naming.AnairiatsDatsQualifiedNameProvider;
+import org.eclipse.xtext.resource.IContainer;
+import org.eclipse.xtext.resource.containers.StateBasedContainerManager;
 
 
 /**
@@ -14,4 +16,8 @@ public class AnairiatsDatsRuntimeModule extends org.ats_lang.AbstractAnairiatsDa
 	public Class<? extends org.eclipse.xtext.naming.IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return AnairiatsDatsQualifiedNameProvider.class;
 	}
+	
+//	public Class<? extends IContainer.Manager>bindIContainer$Manager() {
+//		return StateBasedContainerManager.class;
+//	}
 }

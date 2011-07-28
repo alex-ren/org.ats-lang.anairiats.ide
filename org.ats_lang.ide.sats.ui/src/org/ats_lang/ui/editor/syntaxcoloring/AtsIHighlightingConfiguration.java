@@ -10,22 +10,28 @@ public class AtsIHighlightingConfiguration implements
 		IHighlightingConfiguration {
 
 	public static final String KEYWORD_ID = "keyword";
-	public static final String PUNCTUATION_ID = "punctuation";
 	public static final String COMMENT_ID = "comment";
 	public static final String STRING_ID = "string";
-	public static final String NUMBER_ID = "number";
 	public static final String EXTCODE_ID = "extcode";
-	public static final String DEFAULT_ID = "default";
-	public static final String INVALID_TOKEN_ID = "error";
+	public static final String STACODE_ID = "statics";
+	public static final String DYNCODE_ID = "dynamics";
 	public static final String SEMANTIC_ID = "semantic_color";
+	public static final String DEFAULT_ID = "default";
+	
 
 	public void configure(IHighlightingConfigurationAcceptor acceptor) {
 		acceptor.acceptDefaultHighlighting(KEYWORD_ID, "Keyword",
 				keywordTextStyle());
 		acceptor.acceptDefaultHighlighting(COMMENT_ID, "Comment",
-				keywordTextStyle());
+				commentTextStyle());
+		acceptor.acceptDefaultHighlighting(STRING_ID, "String",
+				stringTextStyle());
 		acceptor.acceptDefaultHighlighting(EXTCODE_ID, "External Code",
-				keywordTextStyle());
+				extcodeTextStyle());
+		acceptor.acceptDefaultHighlighting(STACODE_ID, "Code in statics",
+				staticsTextStyle());
+		acceptor.acceptDefaultHighlighting(DYNCODE_ID, "Code in dynamics",
+				dynamicsTextStyle());
 		
 		acceptor.acceptDefaultHighlighting(SEMANTIC_ID, "Semantic Item",
 				semantic_colorTextStyle());
@@ -37,19 +43,24 @@ public class AtsIHighlightingConfiguration implements
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-
-	public TextStyle errorTextStyle() {
+	public TextStyle extcodeTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		// textStyle.setColor(new RGB(255, 0, 0));
+		textStyle.setColor(new RGB(155, 155, 200));
 		return textStyle;
 	}
-
-	public TextStyle numberTextStyle() {
+	
+	public TextStyle staticsTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(125, 125, 125));
+		textStyle.setColor(new RGB(10, 200, 10));
 		return textStyle;
 	}
-
+	
+	public TextStyle dynamicsTextStyle() {
+		TextStyle textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(200, 10, 10));
+		return textStyle;
+	}
+	
 	public TextStyle stringTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(42, 0, 255));
@@ -58,19 +69,14 @@ public class AtsIHighlightingConfiguration implements
 
 	public TextStyle commentTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(63, 127, 95));
+		textStyle.setColor(new RGB(122, 122, 122));
 		return textStyle;
 	}
 
 	public TextStyle keywordTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(127, 0, 85));
+		textStyle.setColor(new RGB(255, 255, 255));
 		textStyle.setStyle(SWT.BOLD);
-		return textStyle;
-	}
-
-	public TextStyle punctuationTextStyle() {
-		TextStyle textStyle = defaultTextStyle().copy();
 		return textStyle;
 	}
 

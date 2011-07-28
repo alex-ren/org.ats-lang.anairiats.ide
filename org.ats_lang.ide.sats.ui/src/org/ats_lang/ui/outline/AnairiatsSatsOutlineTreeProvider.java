@@ -3,17 +3,8 @@
  */
 package org.ats_lang.ui.outline;
 
-import org.ats_lang.anairiatsSats.andd0cstdecseq;
-import org.ats_lang.anairiatsSats.d0cstdec;
-import org.ats_lang.anairiatsSats.d0ec_sta;
-import org.ats_lang.anairiatsSats.d0ecargseq;
-import org.ats_lang.anairiatsSats.d0ecseq_sta;
-import org.ats_lang.anairiatsSats.d0ecseq_sta_rev;
-import org.ats_lang.anairiatsSats.dcstkind;
-import org.ats_lang.anairiatsSats.satprogram;
+import org.ats_lang.anairiatsSats.*;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.AbstractElement;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;
 import org.eclipse.xtext.ui.editor.outline.impl.DefaultOutlineTreeProvider;
 import org.eclipse.xtext.ui.editor.outline.impl.DocumentRootNode;
@@ -47,38 +38,56 @@ public class AnairiatsSatsOutlineTreeProvider extends
 			System.out.println("lst");
 			return;
 		}
+		
 		for (d0ec_sta n : lst) {
-			createNode(parentNode, n);
+			d0ec m_d0ec = n.getM_d0ec();
+			if (m_d0ec != null) {
+				createNode(parentNode, m_d0ec);
+			}
+			else
+			{
+			    createNode(parentNode, n);
+			}
+			// show the recursive definition
+			andd0cstdecseq m_seq = n.getM_seq();
+			if (m_seq != null) {
+				EList<d0cstdec> m_andd0cstdecseq = m_seq.getM_andd0cstdecseq();
+				for (d0cstdec node: m_andd0cstdecseq) {
+					createNode(parentNode, node);
+				}
+			}
 		}
 	}
     
 	protected void _createChildren(IOutlineNode parentNode, d0ec_sta ele) {
 		/* m_d0ec=d0ec */
 		if (ele.getM_d0ec() != null) {
-			System.out.println("dddddddddddddddddddddddddd");
+			System.out.println("This should not happen. (m_d0ec=d0ec)");
+			createNode(parentNode, ele.getM_d0ec());
+			return;
 		}
 			
 		/* m_kind=dcstkind */
-		dcstkind m_kind = ele.getM_kind();
-		if (m_kind != null) {
-			createNode(parentNode, ele.getM_tmparg());
-			createNode(parentNode, ele.getM_d0cstdec());
-			andd0cstdecseq seq = ele.getM_seq();
-			EList<d0cstdec> declst = seq.getM_andd0cstdecseq();
-			for (d0cstdec dec: declst) {
-			    createNode(parentNode, dec);
-			}
-		}
+		// template args
+		createNode(parentNode, ele.getM_tmparg());
+		
+//		d0cstdec: 
+//		    name=di0de  // list_insert
+//		    m_d0argseq=d0argseq  // {x: int} (x: int)
+//		    m_col=colonwith  // :<fun>
+//		    m_s0exp=s0exp  // int
+//		    m_extname=extnamopt  // = "foo"
+//		    ;
+		d0cstdec m_d0cstdec = ele.getName();
+		// args
+		createNode(parentNode, m_d0cstdec.getM_d0argseq());
+		// fun type
+		createNode(parentNode, m_d0cstdec.getM_col());
+		// return type
+		createNode(parentNode, m_d0cstdec.getM_s0exp());
+		// external name
+		createNode(parentNode, m_d0cstdec.getM_extname());
+		return;
 	}
 	
-//    m_d0ec=d0ec
-//    | m_kind=dcstkind// fun
-//      m_tmparg=d0ecargseq  // {n: type}
-//      m_d0cstdec=d0cstdec   // foo {k: int} (x: int k):<fun> int = "xxx"
-//      m_seq=andd0cstdecseq  // 
-//    | m_extcode=LITERAL_extcode
-//    | srpifkind guad0ec_sta  // #ifdef X #then ... #elif ... #else ... #endif
-//    | SRPINCLUDE m_include=LITERAL_string
-//    | LOCAL m_local=d0ecseq_sta IN m_body=d0ecseq_sta END
-
 }

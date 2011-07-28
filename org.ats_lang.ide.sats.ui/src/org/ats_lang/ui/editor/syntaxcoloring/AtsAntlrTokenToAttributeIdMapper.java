@@ -10,7 +10,20 @@ public class AtsAntlrTokenToAttributeIdMapper extends
 		if("'fun'".equals(tokenName)) {
 			return AtsIHighlightingConfiguration.KEYWORD_ID;
 		}
+		
 		if("'prfun'".equals(tokenName)) {
+			return AtsIHighlightingConfiguration.KEYWORD_ID;
+		}
+		
+		if("RULE_AMPERSAND".equals(tokenName)) {
+			return AtsIHighlightingConfiguration.KEYWORD_ID;
+		}
+		
+		if("RULE_BACKQUOTE".equals(tokenName)) {
+			return AtsIHighlightingConfiguration.KEYWORD_ID;
+		}
+		
+		if("RULE_BANG".equals(tokenName)) {
 			return AtsIHighlightingConfiguration.KEYWORD_ID;
 		}
 		if("RULE_COMMENT_REST".equals(tokenName)) {

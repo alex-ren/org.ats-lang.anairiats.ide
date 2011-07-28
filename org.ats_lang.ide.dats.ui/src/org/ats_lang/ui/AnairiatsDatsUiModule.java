@@ -11,6 +11,8 @@ import org.eclipse.xtext.ui.editor.syntaxcoloring.AbstractAntlrTokenToAttributeI
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
+
+
 /**
  * Use this class to register components to be used within the IDE.
  */
@@ -30,6 +32,11 @@ public class AnairiatsDatsUiModule extends org.ats_lang.ui.AbstractAnairiatsDats
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return AtsISemanticHighlightingCalculator.class;
 	}
+	
+	
+//	public Provider<IAllContainersState> provideIAllContainerState() {
+//		return org.eclipse.xtext.ui.shared.Access.getWorkspaceProjectsState();
+//	}
 	
 //	  @Override
 //	  public Class<? extends ILocationInFileProvider> 

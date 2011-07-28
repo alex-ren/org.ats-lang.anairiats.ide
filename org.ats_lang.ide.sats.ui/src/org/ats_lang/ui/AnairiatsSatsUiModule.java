@@ -3,6 +3,7 @@
  */
 package org.ats_lang.ui;
 
+import org.ats_lang.ui.builder.AtsProjectBasedBuilderParticipant;
 import org.ats_lang.ui.editor.syntaxcoloring.AtsAntlrTokenToAttributeIdMapper;
 import org.ats_lang.ui.editor.syntaxcoloring.AtsIHighlightingConfiguration;
 import org.ats_lang.ui.editor.syntaxcoloring.AtsISemanticHighlightingCalculator;
@@ -30,4 +31,8 @@ public class AnairiatsSatsUiModule extends org.ats_lang.ui.AbstractAnairiatsSats
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return AtsISemanticHighlightingCalculator.class;
 	}
+	
+//	public Class<? extends org.eclipse.xtext.builder.IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
+//		return AtsProjectBasedBuilderParticipant.class;
+//	}
 }
