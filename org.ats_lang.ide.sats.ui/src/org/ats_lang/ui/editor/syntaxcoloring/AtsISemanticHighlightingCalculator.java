@@ -26,9 +26,13 @@ public class AtsISemanticHighlightingCalculator implements
 				String name = node.getSemanticElement().eClass().getName();
 				if (name.equals("f0arg1_sta")
 						|| name.equals("d0arg_sta")) {
-
 					acceptor.addPosition(node.getOffset(), node.getLength(),
-							AtsIHighlightingConfiguration.SEMANTIC_ID);
+							AtsIHighlightingConfiguration.STACODE_ID);
+				}
+				
+				if (name.equals("d0arg_dyn")) {
+					acceptor.addPosition(node.getOffset(), node.getLength(),
+							AtsIHighlightingConfiguration.DYNCODE_ID);
 				}
 
 			}

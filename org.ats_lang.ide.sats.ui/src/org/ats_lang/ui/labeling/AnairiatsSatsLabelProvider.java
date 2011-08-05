@@ -64,8 +64,8 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 			System.out.println("name is " + m_kind.getName());  // FUN
 			System.out.println(m_kind.toString());  // fun
 			
-			d0cstdec m_d0cstdec = ele.getName();
-			return m_kind.toString() + " " + m_d0cstdec.getName();
+			refentity m_d0cstdec = ele.getName();
+			return m_kind.toString() + " " + ((d0cstdec)m_d0cstdec).getName();
 		}
 		
 		return "d0ec_sta";
@@ -95,7 +95,7 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 //			System.out.println("========== " + container.toString());
 			return m_kind + " " + ele.getName();	
 		}
-		return ele.getName().getName();
+		return ele.getName();
 
 	}
 

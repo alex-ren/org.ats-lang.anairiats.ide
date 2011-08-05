@@ -18,7 +18,7 @@ public class AnairiatsDatsOutlineTreeProvider extends
 		DefaultOutlineTreeProvider {
 	protected void _createChildren(DocumentRootNode parentNode,
 			dynprogram dynprog) {
-		d0ecseq_dyn_rec elements = dynprog.getM_dyn();
+		d0ecseq_dyn_rev elements = dynprog.getM_dyn();
 		if (elements == null) {
 			System.out.println("elements == null");
 			return;
@@ -28,29 +28,30 @@ public class AnairiatsDatsOutlineTreeProvider extends
 	}
 
 	protected void _createChildren(IOutlineNode parentNode,
-			d0ecseq_dyn_rec ele) {
-		EList<d0ecseq_dyn> dynlst = ele.getM_d0ec_dyn();
-		for (d0ecseq_dyn node : dynlst) {
+			d0ecseq_dyn_rev ele) {
+		EList<d0ec_dyn> dynlst = ele.getM_d0ec_dyn();
+		for (d0ec_dyn node : dynlst) {
 			// System.out.println("========= " + node.getClass().getName());
-			if (node instanceof d0ecseq_dyn_d0ec) {
-				createNode(parentNode, ((d0ecseq_dyn_d0ec) node).getM_d0ec());
+			if (node instanceof d0ec_dyn_d0ec) {
+				createNode(parentNode, ((d0ec_dyn_d0ec) node).getM_d0ec());
 				continue;
 			} else {
 				createNode(parentNode, node);
 			}
-			if (node instanceof d0ecseq_dyn_ext) {
-				andd0cstdecseq m_rec_d0cstdec = ((d0ecseq_dyn_ext) node)
+			if (node instanceof d0ec_dyn_ext) {
+				andd0cstdecseq m_rec_d0cstdec = ((d0ec_dyn_ext) node)
 						.getM_rec_d0cstdec();
-				EList<d0cstdec> m_andd0cstdecseq = m_rec_d0cstdec
+				EList<refentity> m_andd0cstdecseq = m_rec_d0cstdec
 						.getM_andd0cstdecseq();
-				for (d0cstdec dec : m_andd0cstdecseq) {
+				// d0cstdec
+				for (refentity dec : m_andd0cstdecseq) {
 					createNode(parentNode, dec);
 				}
 				continue;
 			}
 
-			if (node instanceof d0ecseq_dyn_val) {
-				andv0aldecseq m_rec_v0aldec = ((d0ecseq_dyn_val) node)
+			if (node instanceof d0ec_dyn_val) {
+				andv0aldecseq m_rec_v0aldec = ((d0ec_dyn_val) node)
 						.getM_rec_v0aldec();
 				EList<v0aldec> m_andv0aldecseq = m_rec_v0aldec.getM_andv0aldecseq();
 				for (v0aldec vdec : m_andv0aldecseq) {
@@ -59,8 +60,8 @@ public class AnairiatsDatsOutlineTreeProvider extends
 				continue;
 			}
 
-			if (node instanceof d0ecseq_dyn_val_par) {
-				andv0aldecseq m_rec_v0aldec = ((d0ecseq_dyn_val_par) node)
+			if (node instanceof d0ec_dyn_val_par) {
+				andv0aldecseq m_rec_v0aldec = ((d0ec_dyn_val_par) node)
 						.getM_rec_v0aldec();
 				EList<v0aldec> m_andv0aldecseq = m_rec_v0aldec.getM_andv0aldecseq();
 				for (v0aldec vdec : m_andv0aldecseq) {
@@ -68,8 +69,8 @@ public class AnairiatsDatsOutlineTreeProvider extends
 				}
 				continue;
 			}
-			if (node instanceof d0ecseq_dyn_val_rec) {
-				andv0aldecseq m_rec_v0aldec = ((d0ecseq_dyn_val_rec) node)
+			if (node instanceof d0ec_dyn_val_rec) {
+				andv0aldecseq m_rec_v0aldec = ((d0ec_dyn_val_rec) node)
 						.getM_rec_v0aldec();
 				EList<v0aldec> m_andv0aldecseq = m_rec_v0aldec.getM_andv0aldecseq();
 				for (v0aldec vdec : m_andv0aldecseq) {
@@ -78,18 +79,19 @@ public class AnairiatsDatsOutlineTreeProvider extends
 				continue;
 			}
 
-			if (node instanceof d0ecseq_dyn_fun) {
-				andf0undecseq m_rec_fundec = ((d0ecseq_dyn_fun) node)
+			if (node instanceof d0ec_dyn_fun) {
+				andf0undecseq m_rec_fundec = ((d0ec_dyn_fun) node)
 						.getM_rec_fundec();
-				EList<f0undec> m_f0undec = m_rec_fundec.getM_f0undec();
-				for (f0undec fdec : m_f0undec) {
+				EList<refentity> m_f0undec = m_rec_fundec.getM_f0undec();
+				// f0undec
+				for (refentity fdec : m_f0undec) {
 					createNode(parentNode, fdec);
 				}
 				continue;
 			}
 
-			if (node instanceof d0ecseq_dyn_var) {
-				andv0ardecseq m_rec_v0ardec = ((d0ecseq_dyn_var) node)
+			if (node instanceof d0ec_dyn_var) {
+				andv0ardecseq m_rec_v0ardec = ((d0ec_dyn_var) node)
 						.getM_rec_v0ardec();
 				EList<v0ardec> m_f0undec = m_rec_v0ardec.getM_v0ardec();
 				for (v0ardec vdec : m_f0undec) {
@@ -101,7 +103,7 @@ public class AnairiatsDatsOutlineTreeProvider extends
 
 	}
 
-	protected void _createChildren(IOutlineNode parentNode, d0ecseq_dyn_ext ele) {
+	protected void _createChildren(IOutlineNode parentNode, d0ec_dyn_ext ele) {
 		d0ecargseq m_d0ecargseq = ele.getM_d0ecargseq();
 		// tempalte args
 		createNode(parentNode, m_d0ecargseq);

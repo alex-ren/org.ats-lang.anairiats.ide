@@ -59,6 +59,7 @@ Workflow {
 
             // The antlr parser generator fragment.
             fragment = parser.antlr.XtextAntlrGeneratorFragment {
+            	antlrParam = "-Xconversiontimeout" antlrParam = "10000"
             //  options = {
             //      backtrack = true
             //  }
@@ -108,6 +109,7 @@ Workflow {
             	  options = {
                   classSplitting = true
               }
+              antlrParam = "-Xconversiontimeout" antlrParam = "10000"
             }
 
             // generates junit test support classes into Generator#pathTestProject

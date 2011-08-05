@@ -3,7 +3,7 @@
  */
 package org.ats_lang.ui;
 
-import org.ats_lang.ui.builder.AtsProjectBasedBuilderParticipant;
+//import org.ats_lang.ui.builder.AtsProjectBasedBuilderParticipant;
 import org.ats_lang.ui.editor.syntaxcoloring.AtsAntlrTokenToAttributeIdMapper;
 import org.ats_lang.ui.editor.syntaxcoloring.AtsIHighlightingConfiguration;
 import org.ats_lang.ui.editor.syntaxcoloring.AtsISemanticHighlightingCalculator;

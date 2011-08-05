@@ -59,6 +59,7 @@ Workflow {
 
             // The antlr parser generator fragment.
             fragment = parser.antlr.XtextAntlrGeneratorFragment {
+            	antlrParam = "-Xconversiontimeout" antlrParam = "10000"
             //  options = {
             //      backtrack = true
             //  }
@@ -105,6 +106,7 @@ Workflow {
             // generates a more lightweight Antlr parser and lexer tailored for content assist
             fragment = parser.antlr.XtextAntlrUiGeneratorFragment {
             	// added by aren@bu.edu
+            	antlrParam = "-Xconversiontimeout" antlrParam = "10000"
             	  options = {
                   classSplitting = true
               }

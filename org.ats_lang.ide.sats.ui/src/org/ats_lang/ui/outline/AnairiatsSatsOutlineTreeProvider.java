@@ -51,8 +51,8 @@ public class AnairiatsSatsOutlineTreeProvider extends
 			// show the recursive definition
 			andd0cstdecseq m_seq = n.getM_seq();
 			if (m_seq != null) {
-				EList<d0cstdec> m_andd0cstdecseq = m_seq.getM_andd0cstdecseq();
-				for (d0cstdec node: m_andd0cstdecseq) {
+				EList<refentity> m_andd0cstdecseq = m_seq.getM_andd0cstdecseq();
+				for (refentity node: m_andd0cstdecseq) {
 					createNode(parentNode, node);
 				}
 			}
@@ -78,7 +78,7 @@ public class AnairiatsSatsOutlineTreeProvider extends
 //		    m_s0exp=s0exp  // int
 //		    m_extname=extnamopt  // = "foo"
 //		    ;
-		d0cstdec m_d0cstdec = ele.getName();
+		d0cstdec m_d0cstdec = (d0cstdec)ele.getName();
 		// args
 		createNode(parentNode, m_d0cstdec.getM_d0argseq());
 		// fun type
