@@ -95,6 +95,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_p0rec"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_i0deseq"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_i0de"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_opt"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_e0xp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_d0rtdef"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_sortdef"/>
@@ -105,12 +106,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_s0tacst"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_srest"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_s0tavar"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_s0tavarseq"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_s0expdef"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_seq_stadefkind"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_s0asdec"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_d0atdec"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_datatype"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_opt"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_s0expdefseqopt"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_e0xndec"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_exception"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0ec/m_si0de"/>
@@ -562,8 +564,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expB/m_exp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expB/m_seq_arr"/>
     </genClasses>
-    <genClasses ecoreClass="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expc">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expc/m_s0quaseq"/>
+    <genClasses ecoreClass="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expC">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expC/m_s0quaseq"/>
     </genClasses>
     <genClasses ecoreClass="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0arrind">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//d0arrind/m_seq"/>
@@ -772,6 +774,7 @@
     <genClasses ecoreClass="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expA">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expA/m_content"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expA/m_atmspexpA_si0de"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expA/m_rest"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expA/m_s0expseq"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expA/m_labs0expseq"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expA/m_literal"/>
@@ -782,9 +785,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expB/m_s0exp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expB/m_atms0expBseq"/>
     </genClasses>
-    <genClasses ecoreClass="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expc">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expc/m_bra"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expc/m_seq"/>
+    <genClasses ecoreClass="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expC">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expC/m_seq"/>
     </genClasses>
     <genClasses ecoreClass="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0quaseq">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0quaseq/m_s0qua"/>

@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.ats_lang.ide.dats.ui
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Vendor: www.ats-lang.org
+Bundle-Version: 0.0.1
 Bundle-SymbolicName: org.ats_lang.ide.dats.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.ats_lang.ide.dats;visibility:=reexport,
+Require-Bundle: org.ats_lang.ide.sats.ui;bundle-version="0.0.1",
+ org.ats_lang.ide.dats;bundle-version="0.0.1";visibility:=reexport,
  org.eclipse.xtext.ui,
  org.eclipse.ui.editors;bundle-version="3.5.0",
  org.eclipse.ui.ide;bundle-version="3.5.0",
@@ -15,8 +16,7 @@ Require-Bundle: org.ats_lang.ide.dats;visibility:=reexport,
  org.antlr.runtime,
  org.eclipse.xtext.common.types.ui,
  org.eclipse.xtext.ui.codetemplates.ui,
- org.eclipse.compare,
- org.ats_lang.ide.sats.ui;bundle-version="1.0.0"
+ org.eclipse.compare
 Import-Package: org.apache.log4j,
  org.apache.commons.logging
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

@@ -121,6 +121,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_p0rec" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_i0deseq" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_i0de" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_opt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_e0xp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_d0rtdef" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0rtdef"
         containment="true"/>
@@ -139,6 +140,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_srest" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//ands0tacstseq"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_s0tavar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_s0tavarseq" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_s0expdef" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0expdef"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_seq_stadefkind" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//ands0expdefseq"
@@ -149,7 +151,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_datatype" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//andd0atdecseq"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="m_opt" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0expdefseqopt"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="m_s0expdefseqopt" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0expdefseqopt"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_e0xndec" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//e0xndec"
         containment="true"/>
@@ -848,7 +850,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="t1mpapps0expC">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="m_atmC" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expc"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="m_atmC" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpatms0expC"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_t1mpapps0expC" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//t1mpapps0exp"
         containment="true"/>
@@ -871,7 +873,7 @@
         eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0expseq"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="t1mpatms0expc">
+  <eClassifiers xsi:type="ecore:EClass" name="t1mpatms0expC">
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_s0quaseq" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0quaseq"
         containment="true"/>
   </eClassifiers>
@@ -1096,7 +1098,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_ext" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0rtext"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="s0rtext">
+  <eClassifiers xsi:type="ecore:EClass" name="s0rtext" eSuperTypes="platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0exp">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_sort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_ext" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0rtext"
@@ -1161,7 +1163,7 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="apps0expC">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="m_Cfirst" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expc"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="m_Cfirst" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//atms0expC"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_Crest" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//apps0exp"
         containment="true"/>
@@ -1174,6 +1176,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="atms0expA">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_atmspexpA_si0de" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_rest" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_s0expseq" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0expseq"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_labs0expseq" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//labs0expseq"
@@ -1191,13 +1195,12 @@
         eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0expseq"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="atms0expc">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m_bra" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="atms0expC">
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_seq" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0quaseq"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="s0quaseq">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="m_s0qua" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0qua"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="m_s0qua" eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0exp"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="m_s0quaseq" upperBound="-1"
         eType="ecore:EClass platform:/resource/org.ats_lang.ide.sats/src-gen/org/ats_lang/AnairiatsSats.ecore#//s0exp"

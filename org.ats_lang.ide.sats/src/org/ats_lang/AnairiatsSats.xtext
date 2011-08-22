@@ -143,16 +143,50 @@ enum dcstkind:
     | PRVAL='prval'  // prval
     ;
 
+// the following definition causes java.lang.OutOfMemoryError
+//d0ec returns d0ec: 
+//    {d0ec_FIXITY} m_fix=INFIX m_p0rec=p0rec m_i0deseq=i0deseq
+//    | {d0ec_FIXITY} m_fix=INFIXL m_p0rec=p0rec m_i0deseq=i0deseq
+//    | {d0ec_FIXITY} m_fix=INFIXR m_p0rec=p0rec m_i0deseq=i0deseq
+//    | {d0ec_FIXITY} m_fix=PREFIX m_p0rec=p0rec m_i0deseq=i0deseq
+//    | {d0ec_FIXITY} m_fix=POSTFIX m_p0rec=p0rec m_i0deseq=i0deseq
+//    | {d0ec_FIXITY} m_fix=NONFIX m_i0deseq=i0deseq
+//    | {d0ec_FIXITY} m_fix=SYMINTR m_i0deseq=i0deseq
+//    | {d0ec_SRPDEF} m_def=SRPUNDEF m_i0de=i0de  // #undef i0de
+//    | {d0ec_SRPDEF} m_def=SRPDEFINE m_i0de=i0de m_opt=e0xpopt  // #define
+//    | {d0ec_SRPOPR} m_opr=SRPASSERT m_e0xp=e0xp  // #assert
+//    | {d0ec_SRPOPR} m_opr=SRPERROR m_e0xp=e0xp  // #error
+//    | {d0ec_SRPOPR} m_opr=SRPPRINT m_e0xp=e0xp  // #print
+//    | {d0ec_SORTDEF} SORTDEF m_d0rtdef=s0rtdef m_sortdef=ands0rtdefseq  // sortdef x = y
+//    | {d0ec_DATASORT} m_kind=DATASORT m_d0atsrtdec=d0atsrtdec m_drest=andd0atsrtdecseq  // datasort
+//    | {d0ec_DATASORT} m_kind=DATAPARASORT m_d0atsrtdec=d0atsrtdec m_drest=andd0atsrtdecseq
+//    | {d0ec_abskind} m_kind=abskind m_s0tacon=s0tacon m_abskind=ands0taconseq  // absviewtype xxptr (l: addr)
+//    | {d0ec_STA0} STA m_s0tacst=s0tacst m_srest=ands0tacstseq
+//    | {d0ec_STAVAR} STAVAR m_s0tavar=s0tavar m_srest=ands0tavarseq
+//    | {d0ec_STADEF} m_kind=stadefkind m_s0expdef=s0expdef m_seq_stadefkind=ands0expdefseq  // typedef T (int n) = [k: int | k > n] int k
+//    | {d0ec_ASSUME} ASSUME m_s0asdec=s0aspdec  // assume T = int
+//    | {d0ec_datakind} m_kind=datakind m_d0atdec=d0atdec m_datatype=andd0atdecseq m_opt=s0expdefseqopt  
+//    | {d0ec_EXCEPTION} EXCEPTION m_e0xndec=e0xndec m_exception=ande0xndecseq
+//    | {d0ec_CLASSDEC} CLASSDEC m_si0de=si0de (COLON m_s0exp=s0exp)?
+//    | {d0ec_OVERLOAD} OVERLOAD m_di0de=di0de WITH m_dqi0de=dqi0de
+//    | {d0ec_OVERLOAD} OVERLOAD LBRACKET RBRACKET WITH m_dqi0de=dqi0de
+//    | {d0ec_MACRODEF} m_kind=MACDEF m_isrec?=REC? m_m0acdef=m0acdef m_seq_t=andm0acdefseq
+//    | {d0ec_MACRODEF} m_kind=MACRODEF m_isrec?=REC? m_m0acdef=m0acdef m_seq_t=andm0acdefseq
+//    | {d0ec_DYNLOAD} DYNLOAD importURI=STRING
+//    | {d0ec_STALOAD} STALOAD importURI=STRING
+//    | {d0ec_STALOAD} STALOAD m_stai0de=stai0de EQ importURI=STRING
+//    ;
+
 d0ec: 
-    name=INFIX m_p0rec=p0rec i0deseq
-    | name=INFIXL m_p0rec=p0rec i0deseq
-    | name=INFIXR m_p0rec=p0rec i0deseq
-    | name=PREFIX m_p0rec=p0rec i0deseq
-    | name=POSTFIX m_p0rec=p0rec i0deseq
+    name=INFIX m_p0rec=p0rec m_i0deseq=i0deseq
+    | name=INFIXL m_p0rec=p0rec m_i0deseq=i0deseq
+    | name=INFIXR m_p0rec=p0rec m_i0deseq=i0deseq
+    | name=PREFIX m_p0rec=p0rec m_i0deseq=i0deseq
+    | name=POSTFIX m_p0rec=p0rec m_i0deseq=i0deseq
     | name=NONFIX m_i0deseq=i0deseq
     | name=SYMINTR m_i0deseq=i0deseq
     | name=SRPUNDEF m_i0de=i0de  // #undef i0de
-    | name=SRPDEFINE m_i0de=i0de e0xpopt  // #define
+    | name=SRPDEFINE m_i0de=i0de m_opt=e0xpopt  // #define
     | name=SRPASSERT m_e0xp=e0xp  // #assert
     | name=SRPERROR m_e0xp=e0xp  // #error
     | name=SRPPRINT m_e0xp=e0xp  // #print
@@ -161,10 +195,10 @@ d0ec:
     | name=DATAPARASORT m_d0atsrtdec=d0atsrtdec m_drest=andd0atsrtdecseq
     | name=abskind m_s0tacon=s0tacon m_abskind=ands0taconseq  // absviewtype xxptr (l: addr)
     | name=STA m_s0tacst=s0tacst m_srest=ands0tacstseq
-    | name=STAVAR m_s0tavar=s0tavar ands0tavarseq
+    | name=STAVAR m_s0tavar=s0tavar m_s0tavarseq=ands0tavarseq
     | name=stadefkind m_s0expdef=s0expdef m_seq_stadefkind=ands0expdefseq  // typedef T (int n) = [k: int | k > n] int k
     | name=ASSUME m_s0asdec=s0aspdec  // assume T = int
-    | name=datakind m_d0atdec=d0atdec m_datatype=andd0atdecseq m_opt=s0expdefseqopt  
+    | name=datakind m_d0atdec=d0atdec m_datatype=andd0atdecseq m_s0expdefseqopt=s0expdefseqopt  
     | name=EXCEPTION m_e0xndec=e0xndec m_exception=ande0xndecseq
     | name=CLASSDEC m_si0de=si0de (COLON m_s0exp=s0exp)?
     | name=OVERLOAD m_di0de=di0de WITH m_dqi0de=dqi0de
@@ -324,7 +358,6 @@ d0expbase:
     // different from desc
     m_seq1=argd0expseq1 (COLON m_s0exp=s0exp)? 
         (WHERE LBRACE m_d0ecseq=d0ecseq_dyn_rev RBRACE)?
-    // very brute solution: must write else
     | m_dhead=ifhead m_dcond=d0exp THEN m_dthen=d0exp (=>ELSE m_delse=d0exp)?
     | m_shead=sifhead m_scond=s0exp THEN m_sthen=d0exp (=>ELSE m_selse=d0exp)?
     | lamkind m_d0arg1seq=f0arg1seq m_lamopt=colons0expopt m_funarr=funarrow m_lambody=d0exp
@@ -684,7 +717,7 @@ f0undec returns refentity: {f0undec}
 f0arg1seq: {f0arg1seq}(m_f0arg1seq+=f0arg1)*
     ;
 
-f0arg1:{f0arg1}
+f0arg1 returns f0arg1:
     m_f0arg1_sta=f0arg1_sta
     | m_atmp0at=atmp0at
     | DOTLT m_s0expseq=s0expseq GTDOT
@@ -863,7 +896,7 @@ t1mpapps0expB:
     m_atmB=t1mpatms0expB m_rest=(t1mpapps0expA|t1mpapps0expB)?;
 
 t1mpapps0expC:
-    m_atmC=t1mpatms0expc m_t1mpapps0expC=t1mpapps0exp?
+    m_atmC=t1mpatms0expC m_t1mpapps0expC=t1mpapps0exp?
     ;
 
 t1mpatms0expA:
@@ -887,14 +920,14 @@ t1mpatms0expA:
     | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
     | MINUSLTGT {t1mpatms0expA}
     | LBRACE m_s0quaseq=s0quaseq RBRACE
-//    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expc
+//    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expC
     | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
     ;
 t1mpatms0expB:
     ATLBRACKET m_exp=s0exp RBRACKET (LBRACKET m_seq_arr+=s0expseq RBRACKET)+ // @[x][x, y, z]
     ;
     
-t1mpatms0expc:
+t1mpatms0expC:
     LBRACKET m_s0quaseq=s0quaseq RBRACKET
     ;
 
@@ -1172,8 +1205,8 @@ s0rtext:
     ;
 
 s0exp: 
-    (m_apps0exp=apps0exp (COLON s0rt)?
-    | m_exts0exp=exts0exp (COLON s0rt)?
+    (m_apps0exp=apps0exp (COLON s0rtext)?
+    | m_exts0exp=exts0exp (COLON s0rtext)?
     | LAM  m_seq=s0argseqseq colons0rtopt EQGT m_body=s0exp //  zhiqiang: different from desc
     )
     ;
@@ -1207,7 +1240,7 @@ apps0expB:
     m_Bfirst=atms0expB m_Brest=(apps0expA|apps0expB)?;
 
 apps0expC:
-    m_Cfirst=atms0expc m_Crest=apps0exp?;
+    m_Cfirst=atms0expC m_Crest=apps0exp?;
 
 
 exts0exp: 
@@ -1218,7 +1251,7 @@ atms0expA:
     m_content=LITERAL_char  // 'x'
     | m_content=LITERAL_int  // 23
     | m_content=LITERAL_intsp  // 23U
-    | m_atmspexpA_si0de=si0de  // x
+    | m_atmspexpA_si0de=si0de (=>COMMA m_rest+=si0de)* // x
     | OP m_atmspexpA_si0de=si0de  // op x
     | s0taq m_atmspexpA_si0de=si0de  // $ABC.x
     | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
@@ -1235,7 +1268,7 @@ atms0expA:
     | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
     | MINUSLTGT {atms0expA}
     | LBRACE m_s0quaseq=s0quaseq RBRACE
-//    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expc
+//    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expC
     | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
     ;
     
@@ -1243,15 +1276,15 @@ atms0expB:
     ATLBRACKET m_s0exp=s0exp RBRACKET (LBRACKET m_atms0expBseq+=s0expseq RBRACKET)+ // @[x][x, y, z]
     ;
     
-atms0expc:
-    m_bra=LBRACKET m_seq=s0quaseq RBRACKET
+atms0expC:
+    LBRACKET m_seq=s0quaseq RBRACKET
     ;
 
 //
 
 
 
-s0quaseq: {s0quaseq}(m_s0qua=s0qua ((BAR|SEMICOLON) m_s0quaseq+=s0exp)*)?;
+s0quaseq: {s0quaseq}(m_s0qua=s0exp ((BAR|SEMICOLON) m_s0quaseq+=s0exp)*)?;
 
 //// The origin is 
 //s0qua ::= 

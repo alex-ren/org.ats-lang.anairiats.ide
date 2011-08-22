@@ -101,7 +101,7 @@ public class AnairiatsDatsLabelProvider extends DefaultEObjectLabelProvider {
 	}
 	
 	String text(f0undec ele) {
-		return ele.getName();
+		return "f0undec: " + ele.getName();
 	}
 	
 	String text(d0ec_dyn_var ele) {
@@ -120,6 +120,10 @@ public class AnairiatsDatsLabelProvider extends DefaultEObjectLabelProvider {
 	
 	String text(d0ec_dyn_local ele) {
 		return "local";
+	}
+	
+	String text(f0arg1seq ele) {
+		return "f0arg1seq";
 	}
 	
 	String text(d0ec_dyn_extcode ele) {
@@ -161,6 +165,59 @@ public class AnairiatsDatsLabelProvider extends DefaultEObjectLabelProvider {
 		return "atmd0exp_argd0exp";
 	}
 
+	String text(s0exp ele) {
+		return "s0exp";
+	}
+	
+	String text(apps0exp ele) {
+		return "apps0exp";
+	}
+	
+	String text(exts0exp ele) {
+		return "exts0exp";
+	}
+	
+	String text(d0ecargseq ele) {
+		return "d0ecargseq";
+	}	
+	
+	String text(s0argseqseq ele) {
+		return "s0argseqseq";
+	}
+	
+	String text(apps0expA ele) {
+		return "apps0expA";
+	}
+	
+	String text(apps0expB ele) {
+		return "apps0expB";
+	}	
+	
+	String text(apps0expC ele) {
+		return "apps0expC";
+	}
+	
+	String text(atms0expA ele) {
+		return "atms0expA";
+	}
+	
+	String text(atms0expB ele) {
+		return "atms0expB";
+	}
+	
+	String text(atms0expC ele) {
+		return "atms0expC";
+	}
+	
+	String text(s0quaseq ele) {
+		return "s0quaseq";
+	}
+	String text(f0arg1 ele) {
+		return "f0arg1";
+	}
+	String text(f0arg1_sta ele) {
+		return "f0arg1_sta";
+	}
 	/*
 	 * //Labels and icons can be computed like this:
 	 * 

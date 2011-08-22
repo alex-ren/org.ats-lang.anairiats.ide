@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.ats_lang.ide.sats
-Bundle-Vendor: My Company
-Bundle-Version: 1.0.0
+Bundle-Vendor: www.ats-lang.org
+Bundle-Version: 0.0.1
 Bundle-SymbolicName: org.ats_lang.ide.sats; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext;bundle-version="2.0.0";visibility:=reexport,
+ org.eclipse.xtext.ui;bundle-version="2.0.0",
  org.apache.log4j;bundle-version="1.2.15";visibility:=reexport,
  org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional;visibility:=reexport,
  org.eclipse.xtext.generator;resolution:=optional,
@@ -26,9 +27,10 @@ Export-Package: org.ats_lang,
  org.ats_lang.anairiatsSats,
  org.ats_lang.anairiatsSats.impl,
  org.ats_lang.anairiatsSats.util,
+ org.ats_lang.hyperlink,
+ org.ats_lang.parseTreeConstruction,
  org.ats_lang.parser.antlr,
  org.ats_lang.parser.antlr.internal,
  org.ats_lang.scoping,
  org.ats_lang.services,
- org.ats_lang.validation,
- org.ats_lang.parseTreeConstruction
+ org.ats_lang.validation

@@ -55,13 +55,13 @@ public class AtsIHighlightingConfiguration implements
 	}
 	public TextStyle extcodeTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(155, 155, 200));
+		textStyle.setColor(new RGB(139, 105, 20));
 		return textStyle;
 	}
 	
 	public TextStyle staticsTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(10, 200, 10));
+		textStyle.setColor(new RGB(0, 0, 250));
 		return textStyle;
 	}
 	
@@ -73,31 +73,32 @@ public class AtsIHighlightingConfiguration implements
 	
 	public TextStyle identityTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(200, 10, 10));
+		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
 	
 	public TextStyle stringTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(42, 0, 255));
+		textStyle.setColor(new RGB(66, 138, 66));
 		return textStyle;
 	}
 
 	public TextStyle numberTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(42, 0, 255));
+		textStyle.setColor(new RGB(26, 26, 26));
+		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
 	
 	public TextStyle commentTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(122, 122, 122));
+		textStyle.setColor(new RGB(191, 191, 191));
 		return textStyle;
 	}
 
 	public TextStyle keywordTextStyle() {
 		TextStyle textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(255, 255, 255));
+		textStyle.setColor(new RGB(165, 42, 42));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}

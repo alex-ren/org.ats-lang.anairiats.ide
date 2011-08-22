@@ -1,0 +1,38 @@
+'Installing Software' has encountered a problem.
+An error occurred when collecting items to be installed
+
+<< Details.
+
+An error occurred while collecting items to be installed
+session context was:(profile=SDKProfile, phase=org.eclipse.equinox.internal.p2.engine.phases.Collect, operand=, action=).
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/features/org.ats_lang.ide_1.0.0.201108191235.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+Unable to write to repository: file:/home/skomp/Desktop/distros/indigo-final/tmp/eclipse.
+Failed to create directory /home/skomp/Desktop/distros/indigo-final/tmp/eclipse/plugins.
+
+
+
+Due to mysterious crash of eclipse, I increased the size of memory. Then no crash occurrs.
+===============================
+eclipse --launcher.ini ~/.eclipse/eclipse.ini -vmargs -Xmx512m -XX:MaxPermSize=1024m
+===============================
+
+To install Xtext, refer to documentation Getting Started -> Installation.

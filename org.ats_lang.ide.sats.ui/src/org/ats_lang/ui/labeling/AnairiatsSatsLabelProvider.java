@@ -153,10 +153,6 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 		return "s0quaseq";
 	}
 	
-	String text(s0qua ele) {
-		return "s0qua";
-	}
-	
 	String text(s0exp ele) {
 		return "s0exp";
 	}
@@ -169,9 +165,22 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 		return "s0rtext";
 	}
 	
+	String text(f0arg1 ele) {
+		return "f0arg1";
+	}
 	
+	String text(refentity ele) {
+		return "refentity";
+	}
 	
+	String text(s0expseq ele) {
+		return "s0expseq";
+	}
 	
+	String text(f0arg1_sta ele) {
+		return "f0arg1_sta";
+	}
+
 	
 	
 	
