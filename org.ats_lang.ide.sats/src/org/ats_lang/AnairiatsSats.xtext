@@ -984,7 +984,7 @@ s0exparg:
     | m_seq=s0expseq1
     ; /* s0exparg */
 
-commas0expseq: {commas0expseq}(COMMA m_s0exp+=s0exp)*;
+
 
 i0dext:
     IDENTIFIER_ext  // EXTERNAL_IDENTIFIER
@@ -1198,17 +1198,20 @@ s0rtdef:
     m_id=s0rtid EQ m_ext=s0rtext  // x = y
     ;
 
-s0rtext:
-    m_sort=s0rt  // x
-    // {y: int | x > 3; y > 4}
-    | LBRACE m_id=si0de COLON m_ext=s0rtext BAR m_s0exp1+=s0exp ((BAR|SEMICOLON) m_s0exp2+=s0exp)* RBRACE
-    ;
+
+// for reduce the size of the file seperate no todo no
 
 s0exp: 
     (m_apps0exp=apps0exp (COLON s0rtext)?
     | m_exts0exp=exts0exp (COLON s0rtext)?
     | LAM  m_seq=s0argseqseq colons0rtopt EQGT m_body=s0exp //  zhiqiang: different from desc
     )
+    ;
+    
+s0rtext:
+    m_sort=s0rt  // x
+    // {y: int | x > 3; y > 4}
+    | LBRACE m_id=si0de COLON m_ext=s0rtext BAR m_s0exp1+=s0exp ((BAR|SEMICOLON) m_s0exp2+=s0exp)* RBRACE
     ;
     
 s0argseqseq:{s0argseqseq}
@@ -1251,7 +1254,7 @@ atms0expA:
     m_content=LITERAL_char  // 'x'
     | m_content=LITERAL_int  // 23
     | m_content=LITERAL_intsp  // 23U
-    | m_atmspexpA_si0de=si0de (=>COMMA m_rest+=si0de)* // x
+    | m_atmspexpA_si0de=si0de // x
     | OP m_atmspexpA_si0de=si0de  // op x
     | s0taq m_atmspexpA_si0de=si0de  // $ABC.x
     | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
@@ -1284,7 +1287,7 @@ atms0expC:
 
 
 
-s0quaseq: {s0quaseq}(m_s0qua=s0exp ((BAR|SEMICOLON) m_s0quaseq+=s0exp)*)?;
+s0quaseq: {s0quaseq}(m_s0qua=s0qua ((BAR|SEMICOLON) m_s0quaseq+=s0exp)*)?;
 
 //// The origin is 
 //s0qua ::= 
@@ -1292,33 +1295,37 @@ s0quaseq: {s0quaseq}(m_s0qua=s0exp ((BAR|SEMICOLON) m_s0quaseq+=s0exp)*)?;
 //  | si0de commasi0deseq ":" s0rtext
 //; /* s0qua */
 //// This is not LL, becuase apps0exp can also be si0de
-s0qua:
-    name=LITERAL_char  // 'x'
-    | name=LITERAL_int  // 23
-    | name=LITERAL_intsp  // 23U
-    | name=si0de  (m_seq=commasi0deseq COLON m_ext=s0rtext)?  // zhiqiang: different from desc
-    | OP name=si0de  // op x
-    | s0taq m_s0qua_si0de=si0de  // $ABC.x
-    | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
-    | ATLPAREN m_s0expseq=s0expseq RPAREN  // @(x, y, z)  or @(x, y, z | a, b, c)
-    | QUOTELPAREN m_s0expseq=s0expseq RPAREN  // '(x, y, z)  or '(x, y, z | a, b, c)
-    | DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
-    | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
-    | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
-    | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
-    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
-    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
-    | DLREXTYPE_STRUCT STRING OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
-    | ATLBRACKET m_s0exp=s0exp RBRACKET (LBRACKET m_atlbracketseq+=s0expseq RBRACKET)+  // @[x][x, y, z]
-    | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
-    | MINUSLTGT {s0qua}
-    | LBRACE m_s0quaseq=s0quaseq RBRACE
-    | LBRACKET m_s0quaseq=s0quaseq RBRACKET
-    | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
-    ; 
+//s0qua:
+//    name=LITERAL_char  // 'x'
+//    | name=LITERAL_int  // 23
+//    | name=LITERAL_intsp  // 23U
+//    | name=si0de m_rest=commasi0deseq COLON m_ext=s0rtext // zhiqiang: different from desc
+//    | OP name=si0de  // op x
+//    | s0taq m_s0qua_si0de=si0de  // $ABC.x
+//    | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
+//    | ATLPAREN m_s0expseq=s0expseq RPAREN  // @(x, y, z)  or @(x, y, z | a, b, c)
+//    | QUOTELPAREN m_s0expseq=s0expseq RPAREN  // '(x, y, z)  or '(x, y, z | a, b, c)
+//    | DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
+//    | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
+//    | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
+//    | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
+//    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
+//    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
+//    | DLREXTYPE_STRUCT STRING OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
+//    | ATLBRACKET m_s0exp=s0exp RBRACKET (LBRACKET m_atlbracketseq+=s0expseq RBRACKET)+  // @[x][x, y, z]
+//    | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
+//    | MINUSLTGT {s0qua}
+//    | LBRACE m_s0quaseq=s0quaseq RBRACE
+//    | LBRACKET m_s0quaseq=s0quaseq RBRACKET
+//    | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
+//    ; 
     
+s0qua:
+	m_apps0exp=apps0exp
+	| m_name1=si0de m_namerest=commasi0deseq COLON m_s0rtext=s0rtext
+;
+
 commasi0deseq: {commasi0deseq}(COMMA m_seq+=si0de)*;  // , x, y, z
- 
  
 e0fftagseq: {e0fftagseq}(m_ele=e0fftag m_rest=commae0fftagseq)?;  // fun, ~x
 
@@ -1350,13 +1357,15 @@ l0ab:
 
 s0expseq: {s0expseq}m_s0expseq1=s0expseq1?;
 
-s0expseq1: m_ele=s0exp m_rest=commas0expseq  // commabars0expseq
-    ;
+s0expseq1: m_ele=s0exp m_rest=commabars0expseq
+    ; 
+
+commas0expseq: {commas0expseq}(COMMA m_s0exp+=s0exp)*;
 
 BARCOMMA: BAR | COMMA;
 
 commabars0expseq:{commabars0expseq}
-    (BARCOMMA m_commabarseq+=s0exp)*
+    (=>BARCOMMA m_commabarseq+=s0exp)*
     ;
 
 s0taq:  // qualified name

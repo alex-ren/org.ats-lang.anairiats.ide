@@ -181,8 +181,48 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 		return "f0arg1_sta";
 	}
 
+	String text(apps0exp ele) {
+		return "apps0exp";
+	}
 	
+	String text(exts0exp ele) {
+		return "exts0exp";
+	}
+	String text(s0argseqseq ele) {
+		return "s0argseqseq";
+	}
 	
+	String text(apps0expA ele) {
+		return "apps0expA";
+	}
+	
+	String text(apps0expB ele) {
+		return "apps0expB";
+	}
+	
+	String text(apps0expC ele) {
+		return "apps0expC";
+	}
+
+	String text(atms0expA ele) {
+		return "atms0expA";
+	}
+	
+	String text(atms0expB ele) {
+		return "atms0expB";
+	}
+	
+	String text(atms0expC ele) {
+		return "atms0expC";
+	}
+	
+	String text(labs0expseq ele) {
+		return "labs0expseq";
+	}
+	
+	String text(commalabs0expseq ele) {
+		return "commalabs0expseq";
+	}
 	
 	/*
 	 * //Labels and icons can be computed like this:
