@@ -1051,9 +1051,14 @@ bard0atconseq: {bard0atconseq}(BAR m_seq+=d0atcon)*;
 //    ;
 d0atcon:
 	{d0atcon}
-    myconq=conq0uaseq m_di0de=di0de m_coni0ndopt=coni0ndopt m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
+    myconq=conq0uaseq m_di0de=d0atcon_di0de m_coni0ndopt=coni0ndopt m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
     ;
-    
+
+// add extra level to help handle semantic highlighting
+d0atcon_di0de:
+    name = di0de
+    ;
+
 cona0rgopt: {cona0rgopt}(OF m_exp=s0exp)?;
 
 coni0ndopt: {coni0ndopt}(LPAREN m_seq=s0expseq RPAREN)?;
@@ -1097,7 +1102,7 @@ datakind:
 
 
 s0aspdec:
-    m_sqi0de=sqi0de m_s0args=s0argseqseq colons0rtopt EQ m_s0exp=s0exp
+    m_sqi0de=sqi0de m_s0args=s0argseqseq m_colons0rtopt=colons0rtopt EQ m_s0exp=s0exp
     ;
 
 sqi0de:
@@ -1109,7 +1114,7 @@ sqi0de:
 ands0expdefseq: {ands0expdefseq}(AND m_seq+=s0expdef)*;
 
 s0expdef: 
-	si0de m_seq=s0argseqseq colons0rtopt EQ m_exp=s0exp
+	si0de m_seq=s0argseqseq m_colons0rtopt=colons0rtopt EQ m_exp=s0exp
     ;
 
 stadefkind:
@@ -1122,14 +1127,14 @@ stadefkind:
 
 
 
-ands0tavarseq: (AND s0tavar)*;
+ands0tavarseq: {ands0tavarseq}(AND m_seq+=s0tavar)*;
 
-s0tavar: si0de COLON s0rt;  // x: int
+s0tavar: m_si0de=si0de COLON m_s0rt=s0rt;  // x: int
 
 ands0tacstseq: {ands0tacstseq}(AND m_s+=s0tacst)*;
 
 s0tacst:
-    m_si0de=si0de (LPAREN m_seq=d0atargseq RPAREN)? COLON s0rt;
+    m_si0de=si0de (LPAREN m_seq=d0atargseq RPAREN)? COLON m_s0rt=s0rt;
 
 
 ands0taconseq: {ands0taconseq}(AND m_seq+=s0tacon)*;
@@ -1148,19 +1153,19 @@ d0atarg:
     ; /* d0atarg */
 
 s0rtpol:
-    s0rt
-    | PROPMINUS  // "prop-"
-    | PROPPLUS  // "prop+"
-    | TYPEMINUS  // "type-"
-    | TYPEPLUS  // "type+"
-    | T0YPEMINUS  // "t@ype-"
-    | T0YPEPLUS  // "t@ype+"
-    | VIEWMINUS  // "view-"
-    | VIEWPLUS  // "view+"
-    | VIEWTYPEMINUS  // "viewtype-"
-    | VIEWTYPEPLUS  // "viewtype+"
-    | VIEWT0YPEMINUS  // "viewt@ype-"
-    | VIEWT0YPEPLUS  // "viewt@ype+"
+    m_s0rt=s0rt
+    | m_type=PROPMINUS  // "prop-"
+    | m_type=PROPPLUS  // "prop+"
+    | m_type=TYPEMINUS  // "type-"
+    | m_type=TYPEPLUS  // "type+"
+    | m_type=T0YPEMINUS  // "t@ype-"
+    | m_type=T0YPEPLUS  // "t@ype+"
+    | m_type=VIEWMINUS  // "view-"
+    | m_type=VIEWPLUS  // "view+"
+    | m_type=VIEWTYPEMINUS  // "viewtype-"
+    | m_type=VIEWTYPEPLUS  // "viewtype+"
+    | m_type=VIEWT0YPEMINUS  // "viewt@ype-"
+    | m_type=VIEWT0YPEPLUS  // "viewt@ype+"
     ;
 
 abskind:
@@ -1204,7 +1209,7 @@ s0rtdef:
 s0exp: 
     (m_apps0exp=apps0exp (COLON s0rtext)?
     | m_exts0exp=exts0exp (COLON s0rtext)?
-    | LAM  m_seq=s0argseqseq colons0rtopt EQGT m_body=s0exp //  zhiqiang: different from desc
+    | LAM  m_seq=s0argseqseq m_colons0rtopt=colons0rtopt EQGT m_body=s0exp //  zhiqiang: different from desc
     )
     ;
     
@@ -1229,7 +1234,7 @@ s0arg:
 	m_si0de=si0de m_s0rt=colons0rtopt
 ; /* s0arg */
 
-colons0rtopt: (COLON s0rt)?;
+colons0rtopt: {colons0rtopt}(COLON m_s0rt=s0rt)?;
 
 // This is different from desc.
 apps0exp:
@@ -1251,28 +1256,28 @@ exts0exp:
     ;
 
 atms0expA:
-    m_content=LITERAL_char  // 'x'
-    | m_content=LITERAL_int  // 23
-    | m_content=LITERAL_intsp  // 23U
-    | m_atmspexpA_si0de=si0de // x
-    | OP m_atmspexpA_si0de=si0de  // op x
-    | s0taq m_atmspexpA_si0de=si0de  // $ABC.x
-    | LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
-    | ATLPAREN m_s0expseq=s0expseq RPAREN  // @(x, y, z)  or @(x, y, z | a, b, c)
-    | QUOTELPAREN m_s0expseq=s0expseq RPAREN  // '(x, y, z)  or '(x, y, z | a, b, c)
-    | DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
-    | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
-    | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
-    | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
-    | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
-    | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
-    | DLREXTYPE_STRUCT m_literal=STRING OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
+    {atms0expA_base}m_content=LITERAL_char  // 'x'
+    | {atms0expA_base}m_content=LITERAL_int  // 23
+    | {atms0expA_base}m_content=LITERAL_intsp  // 23U
+    | {atms0expA_base}m_atmspexpA_si0de=si0de // x
+    | {atms0expA_comp}OP m_atmspexpA_si0de=si0de  // op x
+    | {atms0expA_base}s0taq m_atmspexpA_si0de=si0de  // $ABC.x
+    | {atms0expA_comp}LPAREN m_s0expseq=s0expseq RPAREN  // (x, y, z)  or (x, y, z | a, b, c)
+    | {atms0expA_comp}ATLPAREN m_s0expseq=s0expseq RPAREN  // @(x, y, z)  or @(x, y, z | a, b, c)
+    | {atms0expA_comp}QUOTELPAREN m_s0expseq=s0expseq RPAREN  // '(x, y, z)  or '(x, y, z | a, b, c)
+    | {atms0expA_comp}DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
+    | {atms0expA_comp}DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
+    | {atms0expA_comp}ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
+    | {atms0expA_comp}QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
+    | {atms0expA_comp}RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
+    | {atms0expA_comp}RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
+    | {atms0expA_comp}DLREXTYPE_STRUCT m_literal=STRING OF LBRACE m_labs0expseq=labs0expseq RBRACE  // $extype_struct "foo" of {x = x', y = y'}
 //    | (ATLBRACKET s0exp RBRACKET) (LBRACKET s0expseq RBRACKET)+  // removed to atms0expB
-    | MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
-    | MINUSLTGT {atms0expA}
-    | LBRACE m_s0quaseq=s0quaseq RBRACE
+    | {atms0expA_comp}MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
+    | {atms0expA_comp}MINUSLTGT {atms0expA}
+    | {atms0expA_comp}LBRACE m_s0quaseq=s0quaseq RBRACE
 //    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expC
-    | HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
+    | {atms0expA_comp}HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
     ;
     
 atms0expB:
@@ -1389,18 +1394,18 @@ si0de:
 
     
 
-s0rt: atms0rt+;
+s0rt: m_seq+=atms0rt+; 
 
 atms0rt:
-    s0rtid |  // x
-    s0rtq s0rtid |  // $AAA.xxx
-    LPAREN s0rtseq RPAREN |  // (x, y, z)
-    ATLPAREN s0rtseq RPAREN  // @(x, y, z)
+    m_s0rtid=s0rtid |  // x
+    m_s0rtq=s0rtq m_s0rtid=s0rtid |  // $AAA.xxx
+    LPAREN m_seq=s0rtseq RPAREN |  // (x, y, z)
+    ATLPAREN m_seq=s0rtseq RPAREN  // @(x, y, z)
     ;
 
-s0rtseq: (s0rt commas0rtseq)?;
+s0rtseq: {s0rtseq}(m_s0rt=s0rt m_seq=commas0rtseq)?;
 
-commas0rtseq: (COMMA s0rt)*;
+commas0rtseq: {commas0rtseq}(COMMA m_seq+=s0rt)*;
 
 s0rtq:  // q means qualified name?
     i0de_dlr DOT |  // $abc.
