@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.ats_lang.ide_0.0.1.qualifier.jar" id="org.ats_lang.ide" version="0.0.1.qualifier">
-      <category name="ats_lang"/>
+   <feature url="features/org.ats_lang.ide_0.0.2.qualifier.jar" id="org.ats_lang.ide" version="0.0.2.qualifier">
+      <category name="org.ats_lang.ide"/>
    </feature>
-   <category-def name="ats_lang" label="ATS Language Support"/>
+   <category-def name="org.ats_lang.ide" label="ATS Language IDE"/>
 </site>
