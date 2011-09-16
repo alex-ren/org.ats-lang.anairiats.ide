@@ -32,31 +32,10 @@ public class AtsISemanticHighlightingCalculator implements
 			return;
 		INode root = resource.getParseResult().getRootNode();
 		for (INode node : root.getAsTreeIterable()) {
-			// EObject gramm = node.getGrammarElement();
-			// if (null != gramm) {
-			// System.out.println("gramm element is " + gramm.toString());
-			// } else {
-			// System.out.println("gramm element is null");
-			// }
-			// EObject seman = node.getSemanticElement();
-			// if (null != seman) {
-			// System.out.println("seman element is " + seman.toString());
-			// } else {
-			// System.out.println("seman element element is null");
-			// }
-
-			// if (node.getSemanticElement() != null) {
-			// System.out.println("1 "
-			// + NodeModelUtils.findActualSemanticObjectFor(node)
-			// .eClass().getName());
-			// } else
-			// System.out.println("1 + ==============");
-			// System.out.println("");
-
 			if (node.hasDirectSemanticElement() == true) {
 				EObject semantic_ele = node.getSemanticElement();
 				String name = semantic_ele.eClass().getName();
-				System.out.println("name is " + name);
+				// System.out.println("name is " + name);
 
 				// val (x, y) = ...
 				if (semantic_ele instanceof simple_atmp0at) {
@@ -125,15 +104,15 @@ public class AtsISemanticHighlightingCalculator implements
 					ICompositeNode cnode = NodeModelUtils
 							.findActualNodeFor(semantic_ele);
 					BidiIterable<INode> all_nodes = cnode.getChildren();
-					for (INode ele : all_nodes) {
-						System.out.println("=== >" + ele.getText() + "<");
-					}
+//					for (INode ele : all_nodes) {
+//						System.out.println("=== >" + ele.getText() + "<");
+//					}
 
-					System.out.println("999999999999999999999");
+//					System.out.println("999999999999999999999");
 					Iterable<ILeafNode> leaf_nodes = cnode.getLeafNodes();
-					for (ILeafNode ele : leaf_nodes) {
-						System.out.println("=== >" + ele.getText() + "<");
-					}
+//					for (ILeafNode ele : leaf_nodes) {
+//						System.out.println("=== >" + ele.getText() + "<");
+//					}
 				}
 
 				// | cons (...) of ...
@@ -186,7 +165,7 @@ public class AtsISemanticHighlightingCalculator implements
 				}
 
 			} else {
-				System.out.println("no name at all");
+//				System.out.println("no name at all");
 			}
 		}
 	}

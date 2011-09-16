@@ -93,9 +93,9 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 		if (container instanceof d0ec_sta) {
 			String m_kind = ((d0ec_sta)container).getM_kind().toString();
 //			System.out.println("========== " + container.toString());
-			return m_kind + " " + ele.getName();	
+			return m_kind + " " + ele.getName() + " (d0cstdec)";	
 		}
-		return ele.getName();
+		return ele.getName() + " (d0cstdec)";	
 
 	}
 

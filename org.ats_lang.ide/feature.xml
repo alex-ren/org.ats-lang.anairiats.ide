@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.ats_lang.ide"
-      label="Ide"
+      label="ATS IDE"
       version="0.0.2.qualifier"
       provider-name="ATS group">
 

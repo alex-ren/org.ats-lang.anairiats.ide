@@ -1,5 +1,5 @@
 grammar org.ats_lang.AnairiatsSats hidden 
-    (BLANKS, COMMENT_REST, COMMENT_CLIKE, COMMENT0, COMMENT_LINE)
+    (BLANKS, COMMENT_REST, COMMENT_CLIKE, COMMENT0, COMMENT1, COMMENT_LINE)
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore	// required for defining terminal rules
 
@@ -8,6 +8,7 @@ generate anairiatsSats "http://www.ats_lang.org/AnairiatsSats"
 satprogram returns satprogram:
     m_sta=d0ecseq_sta
     ;
+    
 
 d0ecseq_dyn_rev:
     {d0ecseq_dyn_rev}(m_d0ec_dyn+=d0ec_dyn  semicolonseq)* 
@@ -119,6 +120,7 @@ p0arg:
     | name=pi0de COLON m_s0exp=s0exp
     ;
 
+// static arguments of function
 d0ecargseq: {d0ecargseq}(m_seq_t+=d0ecarg)*;
 
 d0ecarg: 
@@ -178,38 +180,38 @@ enum dcstkind:
 //    ;
 
 d0ec: 
-    name=INFIX m_p0rec=p0rec m_i0deseq=i0deseq
-    | name=INFIXL m_p0rec=p0rec m_i0deseq=i0deseq
-    | name=INFIXR m_p0rec=p0rec m_i0deseq=i0deseq
-    | name=PREFIX m_p0rec=p0rec m_i0deseq=i0deseq
-    | name=POSTFIX m_p0rec=p0rec m_i0deseq=i0deseq
-    | name=NONFIX m_i0deseq=i0deseq
-    | name=SYMINTR m_i0deseq=i0deseq
-    | name=SRPUNDEF m_i0de=i0de  // #undef i0de
-    | name=SRPDEFINE m_i0de=i0de m_opt=e0xpopt  // #define
-    | name=SRPASSERT m_e0xp=e0xp  // #assert
-    | name=SRPERROR m_e0xp=e0xp  // #error
-    | name=SRPPRINT m_e0xp=e0xp  // #print
-    | name=SORTDEF m_d0rtdef=s0rtdef m_sortdef=ands0rtdefseq  // sortdef x = y
-    | name=DATASORT m_d0atsrtdec=d0atsrtdec m_drest=andd0atsrtdecseq  // datasort
-    | name=DATAPARASORT m_d0atsrtdec=d0atsrtdec m_drest=andd0atsrtdecseq
-    | name=abskind m_s0tacon=s0tacon m_abskind=ands0taconseq  // absviewtype xxptr (l: addr)
-    | name=STA m_s0tacst=s0tacst m_srest=ands0tacstseq
-    | name=STAVAR m_s0tavar=s0tavar m_s0tavarseq=ands0tavarseq
-    | name=stadefkind m_s0expdef=s0expdef m_seq_stadefkind=ands0expdefseq  // typedef T (int n) = [k: int | k > n] int k
-    | name=ASSUME m_s0asdec=s0aspdec  // assume T = int
-    | name=datakind m_d0atdec=d0atdec m_datatype=andd0atdecseq m_s0expdefseqopt=s0expdefseqopt  
-    | name=EXCEPTION m_e0xndec=e0xndec m_exception=ande0xndecseq
-    | name=CLASSDEC m_si0de=si0de (COLON m_s0exp=s0exp)?
-    | name=OVERLOAD m_di0de=di0de WITH m_dqi0de=dqi0de
-    | name=OVERLOAD LBRACKET RBRACKET WITH m_dqi0de=dqi0de
-    | name=MACDEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq
-    | name=MACDEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq
-    | name=MACRODEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq
-    | name=MACRODEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq
-    | name=DYNLOAD importURI=STRING
-    | name=STALOAD importURI=STRING
-    | name=STALOAD m_stai0de=stai0de EQ importURI=STRING
+    m_kind=INFIX m_p0rec=p0rec m_i0deseq=i0deseq
+    | m_kind=INFIXL m_p0rec=p0rec m_i0deseq=i0deseq
+    | m_kind=INFIXR m_p0rec=p0rec m_i0deseq=i0deseq
+    | m_kind=PREFIX m_p0rec=p0rec m_i0deseq=i0deseq
+    | m_kind=POSTFIX m_p0rec=p0rec m_i0deseq=i0deseq
+    | m_kind=NONFIX m_i0deseq=i0deseq
+    | m_kind=SYMINTR m_i0deseq=i0deseq
+    | m_kind=SRPUNDEF m_i0de=i0de  // #undef i0de
+    | m_kind=SRPDEFINE m_i0de=i0de m_opt=e0xpopt  // #define
+    | m_kind=SRPASSERT m_e0xp=e0xp  // #assert
+    | m_kind=SRPERROR m_e0xp=e0xp  // #error
+    | m_kind=SRPPRINT m_e0xp=e0xp  // #print
+    | m_kind=SORTDEF m_d0rtdef=s0rtdef m_sortdef=ands0rtdefseq  // sortdef x = y
+    | m_kind=DATASORT m_d0atsrtdec=d0atsrtdec m_drest=andd0atsrtdecseq  // datasort
+    | m_kind=DATAPARASORT m_d0atsrtdec=d0atsrtdec m_drest=andd0atsrtdecseq
+    | m_kind=abskind m_s0tacon=s0tacon m_abskind=ands0taconseq  // absviewtype xxptr (l: addr)
+    | m_kind=STA m_s0tacst=s0tacst m_srest=ands0tacstseq
+    | m_kind=STAVAR m_s0tavar=s0tavar m_s0tavarseq=ands0tavarseq
+    | m_kind=stadefkind m_s0expdef=s0expdef m_seq_stadefkind=ands0expdefseq  // typedef T (int n) = [k: int | k > n] int k
+    | m_kind=ASSUME m_s0asdec=s0aspdec  // assume T = int
+    | m_kind=datakind m_d0atdec=d0atdec m_datatype=andd0atdecseq m_s0expdefseqopt=s0expdefseqopt  
+    | m_kind=EXCEPTION m_e0xndec=e0xndec m_exception=ande0xndecseq
+    | m_kind=CLASSDEC m_si0de=si0de (COLON m_s0exp=s0exp)?
+    | m_kind=OVERLOAD m_di0de=di0de WITH m_dqi0de=dqi0de
+    | m_kind=OVERLOAD LBRACKET RBRACKET WITH m_dqi0de=dqi0de
+    | m_kind=MACDEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq
+    | m_kind=MACDEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq
+    | m_kind=MACRODEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq
+    | m_kind=MACRODEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq
+    | m_kind=DYNLOAD importURI=STRING
+    | m_kind=STALOAD importURI=STRING
+    | m_kind=STALOAD m_stai0de=stai0de EQ importURI=STRING
     ;
 
 stai0de: ALNUMRIC_IDENTIFIER;
@@ -768,9 +770,9 @@ witht0ype:{witht0ype}
 
 p0at:
     (pi0de AS|BANG pi0de AS |TILDE)*
-        name=atmp0at m_p0atargseq=argp0atseq (COLON m_s0exp=s0exp)?
+        name=atmp0at m_p0atargseq=argp0atseq (COLON (m_s0exp=s0exp))?
     ;
-
+    
 p0atgo:
     (pi0de AS|BANG pi0de AS |TILDE)*
         name=atmp0at m_p0atargseq=argp0atseq (COLON (m_s0exp=s0exp))?
@@ -828,6 +830,9 @@ p0atseq: {p0atseq}(m_p0at=p0at m_p0atseq=commabarp0atseq /* origin is commap0ats
 commabarp0atseq: {commabarp0atseq}((COMMA|BAR) m_commabarp0atseq+=p0at)*;
 commabarp0atseqgo: {commabarp0atseqgo}((COMMA|BAR) m_commabarp0atseq+=p0atgo)*;
 
+argp0atseq1: {argp0atseq1}(m_argp0at+=argp0at)+
+	
+;
 argp0atseq: {argp0atseq}(m_argp0at+=argp0at)*
     ;
 //argp0atseqgo: {argp0atseqgo}(m_argp0at+=argp0atgo)*
@@ -1049,7 +1054,7 @@ bard0atconseq: {bard0atconseq}(BAR m_seq+=d0atcon)*;
 //    m_coni0ndopt=coni0ndopt  // (a, cons (x, xs))
 //    m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
 //    ;
-d0atcon:
+d0atcon returns refentity:
 	{d0atcon}
     myconq=conq0uaseq m_di0de=d0atcon_di0de m_coni0ndopt=coni0ndopt m_cona0rgopt=cona0rgopt  // of (E (a, x), glist (a, xs))
     ;
@@ -1205,6 +1210,9 @@ s0rtdef:
 
 
 // for reduce the size of the file seperate no todo no
+// The rest part is for static
+// remove the content of the file from the beginning to this line actually remove
+// all the dynamic part 
 
 s0exp: 
     (m_apps0exp=apps0exp (COLON s0rtext)?
@@ -1292,7 +1300,7 @@ atms0expC:
 
 
 
-s0quaseq: {s0quaseq}(m_s0qua=s0qua ((BAR|SEMICOLON) m_s0quaseq+=s0exp)*)?;
+s0quaseq: {s0quaseq}(m_s0qua=s0qua ((BAR|SEMICOLON) m_s0quaseq+=s0qua)*)?;  // todo s0qua => s0exp
 
 //// The origin is 
 //s0qua ::= 
@@ -1457,22 +1465,22 @@ p0rec:
     LPAREN i0de SYMBOLIC_IDENTIFIER LITERAL_int RPAREN  // (x > 4)
     )*;
 	
-i0deseq:
-    i0de*;
+i0deseq returns refentity:
+    {i0deseq} m_i0des+=i0de*;
 	
 i0de:
-    ALNUMRIC_IDENTIFIER |
-    SYMBOLIC_IDENTIFIER |
-    AMPERSAND |  // &
-    BACKSLASH |  // \
-    BANG |  // !
-    EQ |  // =
-    GT |  // >
-    GTLT |  // ><
-    LT |  // <
-    MINUSGT  // ->
-    MINUSLTGT  // -<>
-    TILDE  // ~
+    ALNUMRIC_IDENTIFIER
+    | SYMBOLIC_IDENTIFIER
+    | AMPERSAND  // &
+    | BACKSLASH  // \
+    | BANG  // !
+    | EQ  // =
+    | GT  // >
+    | GTLT  // ><
+    | LT  // <
+    | MINUSGT  // ->
+    | MINUSLTGT  // -<>
+    | TILDE  // ~
     ;
 	
 	
@@ -1692,7 +1700,16 @@ terminal R0EAD: "r@ead";
 terminal COMMENT_REST: '////' ANYOTHER*;
 terminal COMMENT_LINE: '//' !('\n'|'\r')* ('\r'? '\n')?;
 terminal COMMENT_CLIKE: '/*' -> '*/';
-terminal COMMENT0:     '(*' -> '*)';
+// terminal COMMENT0:     '(*' -> '*)';
+terminal COMMENT0:
+	'(*' (!'*'|'*'+!('*'|')'))* '*'* ')'
+;
+
+terminal COMMENT1:
+	'(*' (!('*'|'(')  |  '('+(!('('|'*'))  |  '*'+(!('*'|')'|'('))  |  '*'+'('+(!('*'|'('|')')))* '*'* '('+'*'  // (* -> (*
+	(!'*'|'*'+!('*'|')'))* '*'+ ')'  // -> *)
+	(!'*'|'*'+!('*'|')'))* '*'+ ')'+   // -> *)
+;
 
 terminal ALNUMRIC_IDENTIFIER:  // IDENTIFIER_alp in ats_lexer.lats
     ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")*;

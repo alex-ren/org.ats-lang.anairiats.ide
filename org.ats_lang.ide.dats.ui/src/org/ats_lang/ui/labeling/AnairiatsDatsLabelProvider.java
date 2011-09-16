@@ -3,8 +3,17 @@
  */
 package org.ats_lang.ui.labeling;
 
+import java.util.Iterator;
+
+import org.ats_lang.anairiatsDats.AnairiatsDatsPackage;
+import org.ats_lang.anairiatsDats.dynprogram;
 import org.ats_lang.anairiatsSats.*;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.xtext.nodemodel.ICompositeNode;
+import org.eclipse.xtext.nodemodel.ILeafNode;
+import org.eclipse.xtext.nodemodel.INode;
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
 
 import com.google.inject.Inject;
@@ -23,144 +32,210 @@ public class AnairiatsDatsLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	String text(d0ecseq_dyn_rev ele) {
-		return "Program";
+		EObject container = ele.eContainer();
+
+		if (container instanceof dynprogram) {
+			return "Program (d0ecseq_dyn_rev)";
+		} else {
+			return "d0ecseq_dyn_rev";
+		}
+
 	}
-	
+
 	String text(d0ec_dyn_ext ele) {
 		dcstkind m_kind = ele.getM_kind();
-		String funname = ((d0cstdec)ele.getName()).getName();
-		return "extern " + m_kind.toString() + " " + funname;
+		String funname = ((d0cstdec) ele.getName()).getName();
+		return "extern " + m_kind.toString() + " " + funname + " (d0ec_dyn_ext)";
 	}
-	
+
 	String text(d0ec_dyn_ext_val ele) {
 		String m_str = ele.getM_str();
-		return "extern val " + m_str;
+		return "extern val " + m_str + " (d0ec_dyn_val)";
 	}
-	
-	String text(d0ec_dyn_val ele) {
-		String m_valkind = ele.getM_valkind();
-		refentity m_atmp0at = ele.getM_v0aldec().getName().getName();
-		String name = text(m_atmp0at);
-		return m_valkind + " " + name;
-	} 
-	
+
+
+	// This one gets called.
 	String text(refentity ele) {
 		String name;
 		if (ele instanceof simple_atmp0at) {
-			name = text((simple_atmp0at)ele);
+			name = text((simple_atmp0at) ele);
 		} else if (ele instanceof literal_atmp0at) {
-			name = text((literal_atmp0at)ele);
+			name = text((literal_atmp0at) ele);
 		} else if (ele instanceof compound_atmp0at) {
-			name = text((compound_atmp0at)ele);
+			name = text((compound_atmp0at) ele);
 		} else if (ele instanceof f0undec) {
-			name = text((f0undec)ele);
+			name = text((f0undec) ele);
 
 		} else if (ele instanceof d0cstdec) {
-			name = text((d0cstdec)ele);
+			name = text((d0cstdec) ele);
 		} else if (ele instanceof i0nvarg) {
-			name = text((i0nvarg)ele);
-		} else{
+			name = text((i0nvarg) ele);
+		} else if (ele instanceof i0deseq) {
+			name = text((i0deseq) ele);
+		} else if (ele instanceof d0atcon) {
+			name = text((d0atcon) ele);
+		} else {
 			name = "you should not see me";
 		}
 		return name;
 	}
-	String text(d0cstdec ele) {
-		return ele.getName();
-		
+
+	String text(i0deseq ele) {
+		return "i0deseq";  // ele.getM_i0des().get(0);
 	}
+	
+	String text(d0atcon ele) {
+		return "d0atcon";
+	}
+	
+	String text(d0cstdec ele) {
+		return ele.getName() + " (d0cstdec)";	
+
+	}
+
 	String text(i0nvarg ele) {
 		return ele.getName();
+	}
+
+	String text(d0ec_dyn_val ele) {
+		String m_valkind = ele.getM_valkind();
+		refentity m_atmp0at = ele.getM_v0aldec().getName().getName();
+		String name = text(m_atmp0at);
+		return m_valkind + " " + name + " (d0ec_dyn_val)";
 	}
 	
 	String text(d0ec_dyn_val_par ele) {
 		refentity m_atmp0at = ele.getM_v0aldec().getName().getName();
-		return "val par " + text(m_atmp0at);
+		return "val par " + text(m_atmp0at) + "(d0ec_dyn_val_par)";
 	}
-	
+
 	String text(d0ec_dyn_val_rec ele) {
 		refentity m_atmp0at = ele.getM_v0aldec().getName().getName();
-		return "val rec " + text(m_atmp0at);
+		return "val rec " + text(m_atmp0at) + "(d0ec_dyn_val_rec)";
 	}
-	
+
 	String text(literal_atmp0at ele) {
-		return ele.getLiteral_name();
+		return ele.getLiteral_name() + "(literal_atmp0at)";
 	}
-	
+
 	String text(simple_atmp0at ele) {
-		return ele.getName();
+		return ele.getName() + "(simple_atmp0at)";
 	}
-	
+
 	String text(compound_atmp0at ele) {
-		return "compound element";
+		return "compound element" + "(compound_atmp0at)";
 	}
+
 	String text(d0ec_dyn_fun ele) {
 		String m_funkind = ele.getM_funkind();
-		f0undec m_f0undec = (f0undec)ele.getM_fundec();
+		f0undec m_f0undec = (f0undec) ele.getM_fundec();
 		String m_name = m_f0undec.getName();
-		return m_funkind + " " + m_name;
+		return m_funkind + " " + m_name + "(d0ec_dyn_fun)";
 	}
 	
+	String text(decs0argseqseq ele) {
+		return "decs0argseqseq";
+	}
+	
+	String text(i0mpdec ele) {
+		return "i0mpdec";
+	}
+	
+	String text(impqi0de ele) {
+		return "impqi0de";
+	}
+	
+	String text(f0arg2seq ele) {
+		return "f0arg2seq";
+	}
+	
+	String text(colons0expopt ele) {
+		return "colons0expopt";
+	}
+
 	String text(f0undec ele) {
 		return "f0undec: " + ele.getName();
+	}
+
+	
+	String text(witht0ype ele) {
+		return "witht0ype";
 	}
 	
 	String text(d0ec_dyn_var ele) {
 		v0ardec m_v0ardec = ele.getM_v0ardec();
 		String m_name = m_v0ardec.getName();
-		return "var " + m_name;
+		return "var " + m_name + "(d0ec_dyn_var)";
 	}
-	
+
 	String text(d0ec_dyn_impl ele) {
 		i0mpdec m_i0mpdec = ele.getM_i0mpdec();
 		impqi0de m_imp = m_i0mpdec.getM_imp();
-		String m_name = "xx";  // m_imp.getName();  // todo
+		
+		ICompositeNode actNode = NodeModelUtils.findActualNodeFor(m_imp);
+		INode nameINode = actNode.getFirstChild();
+		Iterable<ILeafNode> leafNodes = nameINode.getLeafNodes();
+//		System.out.println("=============================");
+		
+		String m_name = "";
+		// e.g. implement /*comment*/ foo () = ()
+		// leafnode 1 is blank  -- hidden
+		// leafnode 2 is /*comment*/  -- hidden
+		// leafnode 3 is foo  -- not hidden
+		for (ILeafNode leafNode : leafNodes) {
+			if (leafNode.isHidden() == false) {
+//				System.out.println("==== leafNode is " + leafNode.getText());
+				m_name += leafNode.getText();
+			}
+		}
+//		System.out.println("=============================");
+		return "implement " + m_name + " (d0ec_dyn_impl)";
+	}
 
-		return "implement " + m_name;
-	}
-	
 	String text(d0ec_dyn_local ele) {
-		return "local";
+		return "d0ec_dyn_local";
 	}
-	
+
 	String text(f0arg1seq ele) {
 		return "f0arg1seq";
 	}
-	
+
 	String text(d0ec_dyn_extcode ele) {
-		return "external code";
+		return "external code (d0ec_dyn_extcode)";
 	}
-	
+
 	String text(d0ec_dyn_srpif ele) {
-		return ele.getM_ifkind();
+		return ele.getM_ifkind() + " (d0ec_dyn_srpif)";
 	}
-	
+
 	String text(d0ec_dyn_incl ele) {
-		return "#include";
+		return "#include (d0ec_dyn_incl)";
 	}
-	
+
 	String text(d0expbase ele) {
 		return "d0expbase";
 	}
-	
+
 	String text(d0expcase ele) {
 		return "d0expcase";
 	}
-	
+
 	String text(d0expgo ele) {
 		return "d0expgo";
 	}
-	
+
 	String text(d0exp ele) {
 		return "d0exp";
 	}
-	
+
 	String text(argd0expseq1 ele) {
 		return "argd0expseq1";
 	}
-	
+
 	String text(argd0exp ele) {
 		return "argd0exp";
 	}
+
 	String text(atmd0exp_argd0exp ele) {
 		return "atmd0exp_argd0exp";
 	}
@@ -168,56 +243,133 @@ public class AnairiatsDatsLabelProvider extends DefaultEObjectLabelProvider {
 	String text(s0exp ele) {
 		return "s0exp";
 	}
-	
+
 	String text(apps0exp ele) {
 		return "apps0exp";
 	}
-	
+
 	String text(exts0exp ele) {
 		return "exts0exp";
 	}
-	
+
 	String text(d0ecargseq ele) {
 		return "d0ecargseq";
-	}	
-	
+	}
+
 	String text(s0argseqseq ele) {
 		return "s0argseqseq";
 	}
-	
+
 	String text(apps0expA ele) {
 		return "apps0expA";
 	}
-	
+
 	String text(apps0expB ele) {
 		return "apps0expB";
-	}	
-	
+	}
+
 	String text(apps0expC ele) {
 		return "apps0expC";
 	}
-	
+
 	String text(atms0expA ele) {
 		return "atms0expA";
 	}
-	
+
 	String text(atms0expB ele) {
 		return "atms0expB";
 	}
-	
+
 	String text(atms0expC ele) {
 		return "atms0expC";
 	}
-	
+
 	String text(s0quaseq ele) {
 		return "s0quaseq";
 	}
+
 	String text(f0arg1 ele) {
 		return "f0arg1";
 	}
+
 	String text(f0arg1_sta ele) {
 		return "f0arg1_sta";
 	}
+	
+	
+	String text(d0expsemiseq0 ele) {
+		return "d0expsemiseq0";
+	}
+	
+	String text(v0aldec ele) {
+		return "v0aldec";
+	}
+	
+	String text(andv0aldecseq ele) {
+		return "andv0aldecseq";
+	}
+	
+	String text(p0at ele) {
+		return "p0at";
+	}
+	
+	String text(p0atseq ele) {
+		return "p0atseq";
+	}
+
+	String text(commabarp0atseq ele) {
+		return "commabarp0atseq";
+	}
+	
+	String text(argp0atseq ele) {
+		return "argp0atseq";
+	}
+	
+	String text(d0argseq ele) {
+		return "d0argseq";
+	}
+	
+
+	String text(d0arg ele) {
+		return "d0arg";
+	}
+	
+	String text(andd0cstdecseq ele) {
+		return "andd0cstdecseq";
+	}
+	
+	String text(extnamopt ele) {
+		return "extnamopt";
+	}
+	
+	String text(f0arg2 ele) {
+		return "f0arg2";
+	}
+	
+	String text(guap0at ele) {
+		return "guap0at";
+	}
+	
+	String text(d0expbasei ele) {
+		return "d0expbasei";
+	}
+	
+	String text(argd0expseq1i ele) {
+		return "argd0expseq1i";
+	}
+	
+	String text(argd0expi ele) {
+		return "argd0expi";
+	}
+	
+	String text(atmd0exp_argd0expi ele) {
+		return "atmd0exp_argd0expi";
+	}
+
+	String text(caseinv ele) {
+		return "caseinv";
+	}
+	
 	/*
 	 * //Labels and icons can be computed like this:
 	 * 

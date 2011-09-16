@@ -109,9 +109,9 @@ public class AnairiatsDatsOutlineTreeProvider extends
 		createNode(parentNode, ele.getM_fundec());
 	}
 
-	protected void _createChildren(IOutlineNode parentNode, d0ec_dyn_ext ele) {
-		d0ecargseq m_d0ecargseq = ele.getM_d0ecargseq();
-		// tempalte args
-		createNode(parentNode, m_d0ecargseq);
-	}
+//	protected void _createChildren(IOutlineNode parentNode, d0ec_dyn_ext ele) {
+//		d0ecargseq m_d0ecargseq = ele.getM_d0ecargseq();
+//		// tempalte args
+//		createNode(parentNode, m_d0ecargseq);
+//	}
 }

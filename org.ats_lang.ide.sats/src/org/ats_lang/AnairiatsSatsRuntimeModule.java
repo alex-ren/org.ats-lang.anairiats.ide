@@ -4,6 +4,7 @@
 package org.ats_lang;
 
 import org.ats_lang.hyperlink.AtsHyperlinkHelper;
+import org.ats_lang.naming.AnairiatsSatsQualifiedNameProvider;
 import org.ats_lang.scoping.AtsImportUriGlobalScopeProvider;
 import org.ats_lang.scoping.AtsImportUriResolver;
 import org.eclipse.xtext.scoping.impl.ImportUriResolver;
@@ -26,4 +27,8 @@ public class AnairiatsSatsRuntimeModule extends
 	
 	public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() { return AtsHyperlinkHelper.class; }
 	
+	@Override
+	public Class<? extends org.eclipse.xtext.naming.IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return AnairiatsSatsQualifiedNameProvider.class;
+	}
 }

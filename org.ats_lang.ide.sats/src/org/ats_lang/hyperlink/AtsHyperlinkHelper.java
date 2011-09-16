@@ -24,24 +24,24 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-
-
 public class AtsHyperlinkHelper extends HyperlinkHelper {
-	@Inject@HyperlinkLabelProvider
+	@Inject
+	@HyperlinkLabelProvider
 	private ILabelProvider labelProvider;
 
 	@Inject
 	private Provider<XtextHyperlink> hyperlinkProvider;
-	
+
 	@Inject
 	private EObjectAtOffsetHelper eObjectAtOffsetHelper;
-	
+
 	@Override
-	public IHyperlink[] createHyperlinksByOffset(XtextResource resource, int offset, boolean createMultipleHyperlinks) {
+	public IHyperlink[] createHyperlinksByOffset(XtextResource resource,
+			int offset, boolean createMultipleHyperlinks) {
 		// System.out.println("offset is " + offset);
-		
-		IHyperlink[] links = super.createHyperlinksByOffset(resource,
-offset, createMultipleHyperlinks);
+
+		IHyperlink[] links = super.createHyperlinksByOffset(resource, offset,
+				createMultipleHyperlinks);
 		if (null != links) {
 			return links;
 		}
@@ -52,14 +52,14 @@ offset, createMultipleHyperlinks);
 			return null;
 		}
 		d0ec staloaddec = (d0ec) obj;
-		String loadname = staloaddec.getName();
+		String loadname = staloaddec.getM_kind();
 		if (!loadname.equals("staload") && !loadname.equals("dynload")) {
 			return null;
 		}
-		
+
 		String staloadpath = staloaddec.getImportURI();
 		// System.out.println("path is " + staloadpath);
-		
+
 		// must click on the string
 		ICompositeNode cnode = NodeModelUtils.findActualNodeFor(staloaddec);
 		INode pathnode = cnode.getLastChild();
@@ -68,29 +68,30 @@ offset, createMultipleHyperlinks);
 		if (offset < pathoffset || offset >= (pathoffset + pathlen)) {
 			return null;
 		}
-		
+
 		// URI of current resource
 		String curpath = resource.getURI().toString();
 		// System.out.println("resource.getURI() is " + curpath);
-		
+
 		List<IHyperlink> defaultlinks = Lists.newArrayList();
 		IHyperlinkAcceptor acceptor = new HyperlinkAcceptor(defaultlinks);
-		
+
 		XtextHyperlink defaultlink = hyperlinkProvider.get();
-		
+
 		// set region for showing hyperlink
 		Region region = new Region(pathoffset, pathlen);
 		defaultlink.setHyperlinkRegion(region);
-		
-		// It seems this has no effect at all. What is the setHyperlinkText used for?
+
+		// It seems this has no effect at all. What is the setHyperlinkText used
+		// for?
 		final String hyperlinkText = labelProvider.getText(obj);
 		// System.out.println("hyperlinkText is " + hyperlinkText);
 		defaultlink.setHyperlinkText(hyperlinkText);
-		
+
 		URI importUri = URI.createURI(staloadpath);
 		if (EcoreUtil2.isValidUri(resource, importUri)) {
 			// System.out.println("===========isvalid");
-			if("platform".equals(importUri.scheme()) || importUri.isPlatform()) {
+			if ("platform".equals(importUri.scheme()) || importUri.isPlatform()) {
 				defaultlink.setURI(importUri);
 			} else {
 				// path relative to the current file
@@ -101,29 +102,27 @@ offset, createMultipleHyperlinks);
 				defaultlink.setURI(importUri);
 			}
 			acceptor.accept(defaultlink);
-		}
-		else {
+		} else {
 			// path relative to the project folder
 			// System.out.println("===========not isvalid");
 			final String platform = "platform:/resource/";
-			String topath = curpath.substring(0, curpath.indexOf('/', platform.length()));
+			String topath = curpath.substring(0,
+					curpath.indexOf('/', platform.length()));
 			topath = topath + "/" + staloadpath;
 			// System.out.println("topath is " + topath);
 			importUri = URI.createURI(topath);
 			if (EcoreUtil2.isValidUri(resource, importUri)) {
-			    defaultlink.setURI(importUri);
-			    acceptor.accept(defaultlink);
-			    acceptor.accept(defaultlink);
-			} else  {
+				defaultlink.setURI(importUri);
+				acceptor.accept(defaultlink);
+				acceptor.accept(defaultlink);
+			} else {
 				// System.out.println("===========not isvalid again");
 			}
 		}
 
-		if (!defaultlinks.isEmpty())
-		{
+		if (!defaultlinks.isEmpty()) {
 			return Iterables.toArray(defaultlinks, IHyperlink.class);
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
