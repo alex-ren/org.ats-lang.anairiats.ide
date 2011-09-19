@@ -22,5 +22,6 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: org.ats_lang.ui.contentassist,
  org.ats_lang.ui.contentassist.antlr,
  org.ats_lang.ui.editor.syntaxcoloring,
- org.ats_lang.ui.internal
+ org.ats_lang.ui.internal,
+ org.ats_lang.ui.labeling
 Bundle-Activator: org.ats_lang.ui.internal.AnairiatsSatsActivator

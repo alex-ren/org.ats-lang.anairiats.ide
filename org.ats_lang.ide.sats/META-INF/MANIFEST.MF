@@ -33,4 +33,5 @@ Export-Package: org.ats_lang,
  org.ats_lang.parser.antlr.internal,
  org.ats_lang.scoping,
  org.ats_lang.services,
- org.ats_lang.validation
+ org.ats_lang.validation,
+ org.ats_lang.valueconverting

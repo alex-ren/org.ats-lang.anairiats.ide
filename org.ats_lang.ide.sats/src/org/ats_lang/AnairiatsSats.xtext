@@ -180,6 +180,8 @@ enum dcstkind:
 //    ;
 
 d0ec: 
+	{d0ec}
+	(
     m_kind=INFIX m_p0rec=p0rec m_i0deseq=i0deseq
     | m_kind=INFIXL m_p0rec=p0rec m_i0deseq=i0deseq
     | m_kind=INFIXR m_p0rec=p0rec m_i0deseq=i0deseq
@@ -188,7 +190,7 @@ d0ec:
     | m_kind=NONFIX m_i0deseq=i0deseq
     | m_kind=SYMINTR m_i0deseq=i0deseq
     | m_kind=SRPUNDEF m_i0de=i0de  // #undef i0de
-    | m_kind=SRPDEFINE m_i0de=i0de m_opt=e0xpopt  // #define
+    | m_kind=SRPDEFINE m_def_refi0de=refi0de m_opt=e0xpopt  // #define
     | m_kind=SRPASSERT m_e0xp=e0xp  // #assert
     | m_kind=SRPERROR m_e0xp=e0xp  // #error
     | m_kind=SRPPRINT m_e0xp=e0xp  // #print
@@ -201,17 +203,25 @@ d0ec:
     | m_kind=stadefkind m_s0expdef=s0expdef m_seq_stadefkind=ands0expdefseq  // typedef T (int n) = [k: int | k > n] int k
     | m_kind=ASSUME m_s0asdec=s0aspdec  // assume T = int
     | m_kind=datakind m_d0atdec=d0atdec m_datatype=andd0atdecseq m_s0expdefseqopt=s0expdefseqopt  
-    | m_kind=EXCEPTION m_e0xndec=e0xndec m_exception=ande0xndecseq
+    | m_kind=EXCEPTION m_e0xndec=e0xndec m_exception=ande0xndecseq  // exception
     | m_kind=CLASSDEC m_si0de=si0de (COLON m_s0exp=s0exp)?
-    | m_kind=OVERLOAD m_di0de=di0de WITH m_dqi0de=dqi0de
-    | m_kind=OVERLOAD LBRACKET RBRACKET WITH m_dqi0de=dqi0de
-    | m_kind=MACDEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq
-    | m_kind=MACDEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq
-    | m_kind=MACRODEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq
-    | m_kind=MACRODEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq
+    | m_kind=OVERLOAD m_di0de=refdi0de WITH m_dqi0de=[refentity|dqi0de]  // overload
+    | m_kind=OVERLOAD LBRACKET RBRACKET WITH m_dqi0de=[refentity|dqi0de]  // overload
+    | m_kind=MACDEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq  // macdef
+    | m_kind=MACDEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq  // macdef
+    | m_kind=MACRODEF m_m0acdef=m0acdef m_seq_t=andm0acdefseq  // macdef
+    | m_kind=MACRODEF REC m_m0acdef=m0acdef m_seq_t=andm0acdefseq  // macdef
+// one kind of strategy
+//    | m_kind=DYNLOAD filename=STRING  // don't import
+//    | m_kind=STALOAD importURI=SATS_STRING
+//    | m_kind=STALOAD filename=STRING
+//    | m_kind=STALOAD m_stai0de=stai0de EQ importURI=SATS_STRING
+//    | m_kind=STALOAD m_stai0de=stai0de EQ filename=STRING
+
     | m_kind=DYNLOAD importURI=STRING
     | m_kind=STALOAD importURI=STRING
     | m_kind=STALOAD m_stai0de=stai0de EQ importURI=STRING
+    )
     ;
 
 stai0de: ALNUMRIC_IDENTIFIER;
@@ -219,8 +229,8 @@ stai0de: ALNUMRIC_IDENTIFIER;
 andm0acdefseq: {andm0acdefseq}(AND m_seq_t+=m0acdef)*;
 
 
-m0acdef:
-    m_dipde=di0de m_mac=m0acargseq EQ m_d0exp=d0exp
+m0acdef returns refentity:
+    {m0acdef} name=di0de m_mac=m0acargseq EQ m_d0exp=d0exp
     ;
 
 // quite different from the origin due to handle of case
@@ -287,8 +297,8 @@ d0expbasei:
     | m_shead=sifhead m_scond=s0exp THEN m_sthen=d0expi (=>ELSE m_selse=d0expi)?
     | lamkind m_d0arg1seq=f0arg1seq m_lamopt=colons0expopt m_funarr=funarrow m_lambody=d0expi
     | fixkind m_di0de=di0de m_f0arg1seq=f0arg1seq m_fixopt=colons0expopt m_funarr=funarrow m_fixbody=d0expi
-//  | forhead initestpost d0exp  todo not support now
-//  | whilehead atmd0exp d0exp  todo not support now
+    | m_forhead=forhead m_post=initestpost m_body=d0exp  // todo not support now
+    | m_whilehead=whilehead m_atm=atmd0exp m_exp=d0exp  //   todo not support now
     | DLRRAISE m_raise=d0expi
     ;
 
@@ -364,11 +374,37 @@ d0expbase:
     | m_shead=sifhead m_scond=s0exp THEN m_sthen=d0exp (=>ELSE m_selse=d0exp)?
     | lamkind m_d0arg1seq=f0arg1seq m_lamopt=colons0expopt m_funarr=funarrow m_lambody=d0exp
     | fixkind m_di0de=di0de m_f0arg1seq=f0arg1seq m_fixopt=colons0expopt m_funarr=funarrow m_fixbody=d0exp
-//  | forhead initestpost d0exp  todo not support now
-//  | whilehead atmd0exp d0exp  todo not support now
+    | m_forhead=forhead m_post=initestpost m_body=d0exp  // todo not support now
+    | m_whilehead=whilehead m_atm=atmd0exp m_exp=d0exp  //   todo not support now
     | DLRRAISE m_raise=d0exp
     ;
-    
+
+whilehead: WHILESTAR m_loopinv=loopi0nv EQGT
+; /* whilehead */
+
+
+forhead: {forhead} FOR
+  | {forhead} FORSTAR m_loopinv=loopi0nv EQGT
+; /* forhead */
+
+loopi0nv:
+	m_qua=i0nvqua m_met=i0nvmet m_varsta=i0nvargstate m_ressta=i0nvresstate
+;
+
+i0nvqua: {i0nvqua} (LBRACE m_seq=s0quaseq RBRACE)?
+; /* i0nvqua */
+
+i0nvmet: {i0nvmet}(DOTLT m_seq=s0expseq GTDOT)?
+; /* i0nvmet */
+
+i0nvargstate: LPAREN m_seq=i0nvargseq RPAREN
+;
+
+initestpost: LPAREN m_seq1=d0expcommaseq SEMICOLON m_seq2=d0expcommaseq SEMICOLON m_seq3=d0expcommaseq RPAREN
+; /* initestpost */
+
+
+
 //sc0lauseq:
 //    (sc0lau)? barsc0lauseq
 //    ;
@@ -473,12 +509,13 @@ atmd0exp_argd0exp returns atmd0exp_argd0exp:
     // end of [shared by atmd0exp_argd0exp and atmd0exp_argd0expi]
       
     // shared by atmd0exp, atmd0exp_argd0exp and atmd0exp_argd0expi  
-    | m_content=LITERAL_char
-    | m_content=LITERAL_float
-    | m_content=LITERAL_floatsp
-    | m_content=LITERAL_int
-    | m_content=LITERAL_intsp
-    | m_content=STRING
+    | m_val=LITERAL_char
+    | m_val=LITERAL_float
+    | m_val=LITERAL_floatsp
+    | m_val=LITERAL_int
+    | m_val=LITERAL_intsp
+    | m_val=STRING
+//    | m_val=SATS_STRING
     | m_content=SRPFILENAME // #FILENAME
     | m_content=SRPLOCATION  // #LOCATION
     | m_d0dext=i0dext
@@ -695,11 +732,13 @@ commadecs0argseq: {commadecs0argseq}(COMMA m_args+=s0arg)*;
 
 andv0ardecseq: {andv0ardecseq}(AND m_v0ardec+=v0ardec)*;
 
-v0ardec:
-    BANG name=pi0de m_v0arwth=v0arwth EQ m_d0exp=d0exp
+v0ardec returns refentity:
+    {v0ardec} 
+    (BANG name=pi0de m_v0arwth=v0arwth EQ m_d0exp=d0exp
     | name=pi0de (m_v0arwth=v0arwth EQ m_d0exp=d0exp
              | COLON m_s0exp=s0exp m_v0arwth=v0arwth (EQ m_v0ardef_d0exp=d0exp)?
             )
+    )
 ; /* v0ardec */
 
 v0arwth: {v0arwth}(WITH name=pi0de)?;
@@ -871,7 +910,7 @@ d0expsemiseq0: {d0expsemiseq0}(m_d0exp=d0exp (SEMICOLON m_d0expsemiseq0_rest=d0e
 
 d0expcommabarsemiseq: {d0expcommabarsemiseq}(m_d0exp=d0exp m_d0expseq=commabarsemid0expseq)?;
 
-commabarsemid0expseq: {commabarsemid0expseq}((COMMA|BAR|SEMICOLON) m_d0expseq+=d0exp)*;
+commabarsemid0expseq: {commabarsemid0expseq}((COMMA|BAR|SEMICOLON) (m_d0expseq+=d0exp)?)*;
 
 gtlt_t1mps0expseqseq: {gtlt_t1mps0expseqseq}(GTLT m_x=t1mps0expseq m_seqgtlt=gtlt_t1mps0expseqseq)?;
 
@@ -917,6 +956,7 @@ t1mpatms0expA:
     | DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
     | DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
     | ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
+    | LBRACE m_labs0expseq=labs0expseq RBRACE  // {x = 3, y = 4}  // for this, I turned on the backtrack
     | QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
     | RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
     | RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
@@ -1004,7 +1044,9 @@ m0acarg:
     | LPAREN m_seq=m0argseq RPAREN
     ;
     
-m0arg: pi0de;
+m0arg returns refentity:
+	{m0arg} name=pi0de
+;
 
 pi0de:
     ALNUMRIC_IDENTIFIER
@@ -1029,8 +1071,8 @@ d0ynq:
 
 ande0xndecseq: {ande0xndecseq}(AND m_seq+=e0xndec)*;
 
-e0xndec: 
-    m_1=conq0uaseq m_di0de=di0de m_2=cona0rgopt;
+e0xndec returns refentity: 
+    {e0xndec} m_conq0uaseq=conq0uaseq name=di0de m_cona0rgopt=cona0rgopt;
 
 s0expdefseqopt: {s0expdefseqopt}(WHERE m_s0expdef+=s0expdef m_seq_t+=ands0expdefseq)*;
 
@@ -1084,8 +1126,13 @@ di0de:
 	| spi0de
 ;
 
+refdi0de returns refentity:
+	{refdi0de}name=di0de
+;
+
 spi0de:
 	BACKSLASH  // \
+	| =>BANG EQ  // !=  // todo: check whether this is coherent with ATS syntax
     | BANG  // !
     | EQ  // =
     | GT  // >
@@ -1119,7 +1166,7 @@ sqi0de:
 ands0expdefseq: {ands0expdefseq}(AND m_seq+=s0expdef)*;
 
 s0expdef: 
-	si0de m_seq=s0argseqseq m_colons0rtopt=colons0rtopt EQ m_exp=s0exp
+	m_si0de=si0de m_seq=s0argseqseq m_colons0rtopt=colons0rtopt EQ m_exp=s0exp
     ;
 
 stadefkind:
@@ -1276,6 +1323,7 @@ atms0expA:
     | {atms0expA_comp}DLRTUP_T LPAREN m_s0expseq=s0expseq RPAREN  // $tup_t (x, y, z) or $tup_t (x, y, z | a, b, c)
     | {atms0expA_comp}DLRTUP_VT LPAREN m_s0expseq=s0expseq RPAREN  // $tup_vt (x, y, z)  or $tup_vt (x, y, z | a, b, c)
     | {atms0expA_comp}ATLBRACE m_labs0expseq=labs0expseq RBRACE  // @{x = 3, y = 4}
+    | {atms0expA_comp}LBRACE m_labs0expseq=labs0expseq RBRACE  // {x = 3, y = 4}  // for this, I turned on the backtrack
     | {atms0expA_comp}QUOTELBRACE m_labs0expseq=labs0expseq RBRACE  // '{x = 3, y = 4}
     | {atms0expA_comp}RET_T LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_t{x = 3, y = 4}
     | {atms0expA_comp}RET_VT LBRACE m_labs0expseq=labs0expseq RBRACE  // ret_vt{x = 3, y = 4}
@@ -1283,7 +1331,7 @@ atms0expA:
 //    | (ATLBRACKET s0exp RBRACKET) (LBRACKET s0expseq RBRACKET)+  // removed to atms0expB
     | {atms0expA_comp}MINUSLT m_e0fftagseq=e0fftagseq GT  // -<fun, ~1>
     | {atms0expA_comp}MINUSLTGT {atms0expA}
-    | {atms0expA_comp}LBRACE m_s0quaseq=s0quaseq RBRACE
+    | {atms0expA_comp}LBRACE (m_s0quaseq=s0quaseq) RBRACE
 //    | (LBRACKET s0quaseq RBRACKET)  // removed to atms0expC
     | {atms0expA_comp}HASHLBRACKET m_s0quaseq=s0quaseq RBRACKET
     ;
@@ -1300,7 +1348,7 @@ atms0expC:
 
 
 
-s0quaseq: {s0quaseq}(m_s0qua=s0qua ((BAR|SEMICOLON) m_s0quaseq+=s0qua)*)?;  // todo s0qua => s0exp
+s0quaseq: {s0quaseq}(m_s0qua=s0qua ((BAR|SEMICOLON) m_s0quaseq+=s0qua)*)?;
 
 //// The origin is 
 //s0qua ::= 
@@ -1378,7 +1426,7 @@ commas0expseq: {commas0expseq}(COMMA m_s0exp+=s0exp)*;
 BARCOMMA: BAR | COMMA;
 
 commabars0expseq:{commabars0expseq}
-    (=>BARCOMMA m_commabarseq+=s0exp)*
+    (=>BARCOMMA m_commabarseq+=s0exp?)*
     ;
 
 s0taq:  // qualified name
@@ -1465,8 +1513,12 @@ p0rec:
     LPAREN i0de SYMBOLIC_IDENTIFIER LITERAL_int RPAREN  // (x > 4)
     )*;
 	
-i0deseq returns refentity:
-    {i0deseq} m_i0des+=i0de*;
+i0deseq:
+    {i0deseq} m_i0des+=refi0de*;
+
+refi0de returns refentity:
+	{refi0de} name=i0de
+;
 	
 i0de:
     ALNUMRIC_IDENTIFIER
@@ -1705,11 +1757,19 @@ terminal COMMENT0:
 	'(*' (!'*'|'*'+!('*'|')'))* '*'* ')'
 ;
 
+// support (* aaa (* bbb *) ddd (* eee *) fff *)
 terminal COMMENT1:
-	'(*' (!('*'|'(')  |  '('+(!('('|'*'))  |  '*'+(!('*'|')'|'('))  |  '*'+'('+(!('*'|'('|')')))* '*'* '('+'*'  // (* -> (*
-	(!'*'|'*'+!('*'|')'))* '*'+ ')'  // -> *)
+	'(*' 
+	
+	(
+		(!('*'|'(')  |  '('+(!('('|'*'))  |  '*'+(!('*'|')'|'('))  |  '*'+'('+(!('*'|'('|')')))* '*'*  // misc
+		'('+'*'  // (* -> (*
+		(!'*'|'*'+!('*'|')'))* '*'+ ')'  // -> *)
+	)+
+	
 	(!'*'|'*'+!('*'|')'))* '*'+ ')'+   // -> *)
 ;
+
 
 terminal ALNUMRIC_IDENTIFIER:  // IDENTIFIER_alp in ats_lexer.lats
     ('A'..'Z'|'a'..'z'|'_') ('0'..'9'|'A'..'Z'|'a'..'z'|'_'|"'")*;
@@ -1738,7 +1798,7 @@ terminal SYMBOLIC_IDENTIFIER:  // IDENTIFIER_sym in ats_lexer.lats
     ;
     
 terminal LITERAL_int:
-    '~'? (('0'..'9')+ | '0' ('x'|'X') ('0'..'7')+)
+    '~'? (('0'..'9')+ | '0' ('x'|'X') ('0'..'9')+)
     ;
 
 terminal LITERAL_intsp:
@@ -1774,14 +1834,19 @@ terminal BACKQUOTELPAREN: '`(';  // macro syntax
 terminal COMMALPAREN: ',(';  // macro syntax
 terminal PERCENTLPAREN: '%(';  // macro syntax
   
-// todo: add support for escape number
-terminal STRING:
-    '"' ( '\\' ('n'|'t'|'v'|'b'|'r'|'f'|'a'|'\\'|'?'|'\''|'"'|'('|'['|'{'|('\r'? '\n')) |
-    !('\\'|'"') )* '"';
+//terminal SATS_STRING:
+//    '"' ( '\\' ('n'|'t'|'v'|'b'|'r'|'f'|'a'|'\\'|'?'|'\''|'"'|'('|'['|'{'|('\r'? '\n')|('0'..'9')) |
+//    !('\\'|'"') )* '.sats"'
+//;
 
-// todo: add support for escape number
+terminal STRING:
+    '"' ( '\\' ('n'|'t'|'v'|'b'|'r'|'f'|'a'|'\\'|'?'|'\''|'"'|'('|'['|'{'|('\r'? '\n')|('0'..'9')) |
+    !('\\'|'"') )* '"'
+;
+
 terminal LITERAL_char:
-	"'" (('\\' .) | !'\\') "'";
+	"'" (('\\' .) | !('\\'|'\''))+ "'"
+;
 
 // todo cannot handle %{%%}, but seems not important
 terminal LITERAL_extcode:

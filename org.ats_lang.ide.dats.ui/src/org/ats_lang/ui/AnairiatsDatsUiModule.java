@@ -32,15 +32,5 @@ public class AnairiatsDatsUiModule extends org.ats_lang.ui.AbstractAnairiatsDats
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return AtsISemanticHighlightingCalculator.class;
 	}
-	
-	
-//	public Provider<IAllContainersState> provideIAllContainerState() {
-//		return org.eclipse.xtext.ui.shared.Access.getWorkspaceProjectsState();
-//	}
-	
-//	  @Override
-//	  public Class<? extends ILocationInFileProvider> 
-//	          bindILocationInFileProvider() {
-//	    return MyDslLocationInFileProvider.class;
-//	  }
 }
+

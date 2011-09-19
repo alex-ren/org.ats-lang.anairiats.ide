@@ -301,12 +301,15 @@ public class AtsAntlrTokenToAttributeIdMapper extends
 		m_tokenmap.put("RULE_COMMENT_LINE",
 				AtsIHighlightingConfiguration.COMMENT_ID);
 		m_tokenmap.put("RULE_COMMENT0",
-				
+				AtsIHighlightingConfiguration.COMMENT_ID);
+		m_tokenmap.put("RULE_COMMENT1",
 				AtsIHighlightingConfiguration.COMMENT_ID);
 		m_tokenmap.put("RULE_LITERAL_EXTCODE",
 				AtsIHighlightingConfiguration.EXTCODE_ID);
 		
 		m_tokenmap.put("RULE_STRING",
+				AtsIHighlightingConfiguration.STRING_ID);
+		m_tokenmap.put("RULE_SATS_STRING",
 				AtsIHighlightingConfiguration.STRING_ID);
 		m_tokenmap.put("RULE_LITERAL_char",
 				AtsIHighlightingConfiguration.STRING_ID);

@@ -6,7 +6,9 @@ package org.ats_lang;
 import org.ats_lang.naming.AnairiatsDatsQualifiedNameProvider;
 import org.ats_lang.scoping.AtsImportUriGlobalScopeProvider;
 import org.ats_lang.scoping.AtsImportUriResolver;
+import org.ats_lang.valueconverting.AtsValueConverterService;
 import org.ats_lang.hyperlink.AtsHyperlinkHelper;
+import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.scoping.impl.ImportUriResolver;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 
@@ -30,12 +32,18 @@ public class AnairiatsDatsRuntimeModule extends org.ats_lang.AbstractAnairiatsDa
 		return AtsImportUriResolver.class;
 	}
 	
+	@Override
 	public Class<? extends org.eclipse.xtext.scoping.IGlobalScopeProvider> bindIGlobalScopeProvider() {
 		return AtsImportUriGlobalScopeProvider.class;
 	}
 	
 	public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() { return AtsHyperlinkHelper.class; }
 	
+	@Override
+	public Class<? extends IValueConverterService> 
+	        bindIValueConverterService() {
+	      return AtsValueConverterService.class; 
+	} 
 	
 	
 }

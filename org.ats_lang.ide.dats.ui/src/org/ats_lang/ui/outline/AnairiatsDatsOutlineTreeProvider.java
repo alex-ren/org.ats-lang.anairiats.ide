@@ -93,9 +93,9 @@ public class AnairiatsDatsOutlineTreeProvider extends
 			if (node instanceof d0ec_dyn_var) {
 				andv0ardecseq m_rec_v0ardec = ((d0ec_dyn_var) node)
 						.getM_rec_v0ardec();
-				EList<v0ardec> m_f0undec = m_rec_v0ardec.getM_v0ardec();
-				for (v0ardec vdec : m_f0undec) {
-					createNode(parentNode, vdec);
+				EList<refentity> m_f0undec = m_rec_v0ardec.getM_v0ardec();
+				for (refentity vdec : m_f0undec) {
+					createNode(parentNode, (v0ardec)vdec);
 				}
 				continue;
 			}

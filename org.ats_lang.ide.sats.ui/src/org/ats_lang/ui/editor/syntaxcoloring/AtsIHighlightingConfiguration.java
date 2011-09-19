@@ -111,7 +111,6 @@ public class AtsIHighlightingConfiguration implements
 	  
 	  public TextStyle spchar_colorTextStyle() {
 		    TextStyle textStyle = new TextStyle();
-		    textStyle.setStyle(SWT.ITALIC);
 		    return textStyle;
 	  }
 }

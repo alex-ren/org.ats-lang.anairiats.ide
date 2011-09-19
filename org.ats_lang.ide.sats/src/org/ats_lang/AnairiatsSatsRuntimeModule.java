@@ -7,6 +7,8 @@ import org.ats_lang.hyperlink.AtsHyperlinkHelper;
 import org.ats_lang.naming.AnairiatsSatsQualifiedNameProvider;
 import org.ats_lang.scoping.AtsImportUriGlobalScopeProvider;
 import org.ats_lang.scoping.AtsImportUriResolver;
+import org.ats_lang.valueconverting.AtsValueConverterService;
+import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.scoping.impl.ImportUriResolver;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 
@@ -21,6 +23,7 @@ public class AnairiatsSatsRuntimeModule extends
 		return AtsImportUriResolver.class;
 	}
 
+	@Override
 	public Class<? extends org.eclipse.xtext.scoping.IGlobalScopeProvider> bindIGlobalScopeProvider() {
 		return AtsImportUriGlobalScopeProvider.class;
 	}
@@ -31,4 +34,10 @@ public class AnairiatsSatsRuntimeModule extends
 	public Class<? extends org.eclipse.xtext.naming.IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return AnairiatsSatsQualifiedNameProvider.class;
 	}
+	
+	@Override
+	public Class<? extends IValueConverterService> 
+	        bindIValueConverterService() {
+	      return AtsValueConverterService.class; 
+	} 
 }

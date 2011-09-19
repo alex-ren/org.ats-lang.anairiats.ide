@@ -38,13 +38,14 @@ public class AnairiatsDatsQualifiedNameProvider extends
 
 	@Override
 	public QualifiedName getFullyQualifiedName(final EObject obj) {
-		QualifiedName qname = super.getFullyQualifiedName(obj);
-//		if (null != qname) {
-//			System.out.println("qname is " + qname);
-//		} else {
-//			System.out.println("qname is null");
-//		}
-		return qname; // QualifiedName.create("xxx1"); // qname;
+//		QualifiedName qname = super.getFullyQualifiedName(obj);
+////		if (null != qname) {
+////			System.out.println("qname is " + qname);
+////		} else {
+////			System.out.println("qname is null");
+////		}
+//		return qname; // QualifiedName.create("xxx1"); // qname;
+		return null;
 	}
 	//
 	// private int m_counter;

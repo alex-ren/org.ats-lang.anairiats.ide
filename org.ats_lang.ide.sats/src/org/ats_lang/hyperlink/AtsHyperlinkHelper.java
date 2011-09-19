@@ -51,14 +51,23 @@ public class AtsHyperlinkHelper extends HyperlinkHelper {
 		if (!(obj instanceof d0ec)) {
 			return null;
 		}
+
 		d0ec staloaddec = (d0ec) obj;
 		String loadname = staloaddec.getM_kind();
-		if (!loadname.equals("staload") && !loadname.equals("dynload")) {
+		
+		String loadPath = null;
+		if (loadname.equals("staload")) {
+			loadPath = staloaddec.getImportURI();
+//			if (null == loadPath) {
+//				loadPath = staloaddec.getFilename();
+//			}
+		} else if (loadname.equals("dynload")) {
+//			loadPath = staloaddec.getFilename();
+			loadPath = staloaddec.getImportURI();
+		} else {
 			return null;
 		}
-
-		String staloadpath = staloaddec.getImportURI();
-		// System.out.println("path is " + staloadpath);
+//		System.out.println("path is " + loadPath);
 
 		// must click on the string
 		ICompositeNode cnode = NodeModelUtils.findActualNodeFor(staloaddec);
@@ -71,7 +80,7 @@ public class AtsHyperlinkHelper extends HyperlinkHelper {
 
 		// URI of current resource
 		String curpath = resource.getURI().toString();
-		// System.out.println("resource.getURI() is " + curpath);
+//		System.out.println("resource.getURI() is " + curpath);
 
 		List<IHyperlink> defaultlinks = Lists.newArrayList();
 		IHyperlinkAcceptor acceptor = new HyperlinkAcceptor(defaultlinks);
@@ -88,15 +97,15 @@ public class AtsHyperlinkHelper extends HyperlinkHelper {
 		// System.out.println("hyperlinkText is " + hyperlinkText);
 		defaultlink.setHyperlinkText(hyperlinkText);
 
-		URI importUri = URI.createURI(staloadpath);
+		URI importUri = URI.createURI(loadPath);
 		if (EcoreUtil2.isValidUri(resource, importUri)) {
-			// System.out.println("===========isvalid");
+//			System.out.println("===========isvalid");
 			if ("platform".equals(importUri.scheme()) || importUri.isPlatform()) {
 				defaultlink.setURI(importUri);
 			} else {
 				// path relative to the current file
 				String topath = curpath.substring(0, curpath.lastIndexOf('/'));
-				topath = topath + "/" + staloadpath;
+				topath = topath + "/" + loadPath;
 				// System.out.println("topath is " + topath);
 				importUri = URI.createURI(topath);
 				defaultlink.setURI(importUri);
@@ -108,15 +117,14 @@ public class AtsHyperlinkHelper extends HyperlinkHelper {
 			final String platform = "platform:/resource/";
 			String topath = curpath.substring(0,
 					curpath.indexOf('/', platform.length()));
-			topath = topath + "/" + staloadpath;
-			// System.out.println("topath is " + topath);
+			topath = topath + "/" + loadPath;
+//			System.out.println("topath is " + topath);
 			importUri = URI.createURI(topath);
 			if (EcoreUtil2.isValidUri(resource, importUri)) {
 				defaultlink.setURI(importUri);
 				acceptor.accept(defaultlink);
-				acceptor.accept(defaultlink);
 			} else {
-				// System.out.println("===========not isvalid again");
+//				System.out.println("===========not isvalid again");
 			}
 		}
 
