@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.ats_lang.ide.sats.ui
 Bundle-Vendor: www.ats-lang.org
-Bundle-Version: 0.0.2
+Bundle-Version: 0.0.2.qualifier
 Bundle-SymbolicName: org.ats_lang.ide.sats.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.ats_lang.ide.sats;bundle-version="0.0.1";visibility:=reexport,

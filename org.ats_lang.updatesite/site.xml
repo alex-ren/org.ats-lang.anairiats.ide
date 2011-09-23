@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.ats_lang.ide_0.0.2.201109141446.jar" id="org.ats_lang.ide" version="0.0.2.201109141446">
-      <category name="ats_lang"/>
+   <feature url="features/org.ats_lang.ide_0.0.2.201109201904.jar" id="org.ats_lang.ide" version="0.0.2.201109201904">
+      <category name="org.ats_lang"/>
    </feature>
-   <category-def name="ats_lang" label="ATS Language Support"/>
+   <feature url="features/org.ats_lang.ide_0.0.2.201109201907.jar" id="org.ats_lang.ide" version="0.0.2.201109201907">
+      <category name="org.ats_lang"/>
+   </feature>
+   <feature url="features/org.ats_lang.ide_0.0.2.201109221035.jar" id="org.ats_lang.ide" version="0.0.2.201109221035">
+      <category name="org.ats_lang"/>
+   </feature>
+   <category-def name="org.ats_lang" label="ATS Programming Language">
+      <description>
+         ATS Programming Language Products
+      </description>
+   </category-def>
 </site>

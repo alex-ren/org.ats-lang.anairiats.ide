@@ -7,6 +7,6 @@ import "http://www.ats_lang.org/AnairiatsSats"
 
  
 dynprogram returns dynprogram:
-    m_dyn=d0ecseq_dyn_rev
+    m_dyn=d0ecseq_dyn_rev 
     ;
      
