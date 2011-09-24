@@ -118,19 +118,24 @@ public class AnairiatsSatsScopeProvider extends AbstractDeclarativeScopeProvider
 		// System.out.println("ddddddddddddddd name is " + reference.getName());
 		// System.out.println("getScope =====" + context.getClass().getName() + "======" + context.eResource().getURI().toString());
 		
+		
+		int lastOffset = 0;
+		
 		List<INode> iNodeList = NodeModelUtils.findNodesForFeature(context,
 				reference);
-		INode lastNode = iNodeList.get(iNodeList.size() - 1);
-		if (lastNode == null) {
-			System.out.println("last node is null, should not happen");
-			return null;
+		int sz = iNodeList.size();
+		
+		if (0 < sz) {
+			INode lastNode = iNodeList.get(iNodeList.size() - 1);
+			lastOffset = lastNode.getTotalEndOffset();
+		} else {
+			// for template proposal
+			ICompositeNode compNode = NodeModelUtils.findActualNodeFor(context);
+			lastOffset = compNode.getTotalEndOffset();
 		}
 		
-		String token = NodeModelUtils.getTokenText(lastNode);
-		// System.out.println("startline is " + last.getStartLine() +
-		// " end line is " + last.getEndLine() +
-		// " offset is " + lastNode.getTotalOffset());
-		int lastOffset = lastNode.getTotalEndOffset();
+//		String token = NodeModelUtils.getTokenText(lastNode);
+
 
 		PolymorphicDispatcher<List<IEObjectDescription>> dispatcher = new PolymorphicDispatcher<List<IEObjectDescription>>(
 				Collections.singletonList(this), getPredicate(context,
@@ -144,11 +149,11 @@ public class AnairiatsSatsScopeProvider extends AbstractDeclarativeScopeProvider
 			}
 		};
 
-		return getScope(context, reference, lastOffset, token, dispatcher);
+		return getScope(context, reference, lastOffset, dispatcher);
 	}
 
 	protected IScope getScope(EObject context, EReference reference,
-			int lastOffset, String token,
+			int lastOffset,
 			PolymorphicDispatcher<List<IEObjectDescription>> dispatcher) {
 		IScope outerScope = null;
 		EObject container = null;
@@ -179,6 +184,13 @@ public class AnairiatsSatsScopeProvider extends AbstractDeclarativeScopeProvider
 			}
 		} else {
 			container = context.eContainer();
+		}
+		
+		if (null == container) {
+			outerScope = globalScopeProvider.getScope(context.eResource(),
+					reference, null);
+		} else {
+			outerScope = getScope(container, reference, lastOffset, dispatcher);
 		}
 		
 		EList<EObject> eleList = context.eContents();
@@ -239,28 +251,30 @@ public class AnairiatsSatsScopeProvider extends AbstractDeclarativeScopeProvider
 		// reverse the order, so that jump to the closest one
 		Collections.reverse(curScope);
 		
-		// search at the current level
-		IEObjectDescription target = null;
-		QualifiedName qToken = converter.toQualifiedName(token);
-		for (IEObjectDescription objDesc: curScope) {
-			if (objDesc.getName().compareTo(qToken) == 0) {
-				target = objDesc;
-				break;
-			}
-		}
-		if (target != null) {  // found the reference
-			curScope = new ArrayList<IEObjectDescription>();
-			curScope.add(target);
-			return new SimpleScope(IScope.NULLSCOPE, curScope);
-		} else {
-			if (null == container) {
-				outerScope = globalScopeProvider.getScope(context.eResource(),
-						reference, null);
-			} else {
-				outerScope = getScope(container, reference, lastOffset, token, dispatcher);
-			}
-			return outerScope;
-		}
+		return new SimpleScope(outerScope, curScope);
+		
+//		// search at the current level
+//		IEObjectDescription target = null;
+//		QualifiedName qToken = converter.toQualifiedName(token);
+//		for (IEObjectDescription objDesc: curScope) {
+//			if (objDesc.getName().compareTo(qToken) == 0) {
+//				target = objDesc;
+//				break;
+//			}
+//		}
+//		if (target != null) {  // found the reference
+//			curScope = new ArrayList<IEObjectDescription>();
+//			curScope.add(target);
+//			return new SimpleScope(IScope.NULLSCOPE, curScope);
+//		} else {
+//			if (null == container) {
+//				outerScope = globalScopeProvider.getScope(context.eResource(),
+//						reference, null);
+//			} else {
+//				outerScope = getScope(container, reference, lastOffset, token, dispatcher);
+//			}
+//			return outerScope;
+//		}
 	}
 
 	// example for function signature
