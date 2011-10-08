@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.ats_lang.ide_0.0.2.201109232310.jar" id="org.ats_lang.ide" version="0.0.2.201109232310">
+   <feature url="features/org.ats_lang.ide_0.0.2.201109271441.jar" id="org.ats_lang.ide" version="0.0.2.201109271441">
       <category name="org.ats_lang"/>
    </feature>
-   <category-def name="org.ats_lang" label="ATS Programming Language IDE">
+   <category-def name="org.ats_lang" label="ATS Programming Language">
       <description>
-         ATS Programming Language Products
+         ATS Programming Language Product
       </description>
    </category-def>
 </site>

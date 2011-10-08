@@ -294,6 +294,9 @@ public class AtsAntlrTokenToAttributeIdMapper extends
 		m_tokenmap.put("RULE_ATFIX", AtsIHighlightingConfiguration.KEYWORD_ID);
 		m_tokenmap.put("RULE_R0EAD", AtsIHighlightingConfiguration.KEYWORD_ID);
 		
+
+		m_tokenmap.put("DLRLST_VT", AtsIHighlightingConfiguration.KEYWORD_ID);
+		
 		m_tokenmap.put("RULE_COMMENT_REST",
 				AtsIHighlightingConfiguration.COMMENT_ID);
 		m_tokenmap.put("RULE_COMMENT_CLIKE",
@@ -304,6 +307,9 @@ public class AtsAntlrTokenToAttributeIdMapper extends
 				AtsIHighlightingConfiguration.COMMENT_ID);
 		m_tokenmap.put("RULE_COMMENT1",
 				AtsIHighlightingConfiguration.COMMENT_ID);
+		m_tokenmap.put("RULE_SL_COMMENT",
+				AtsIHighlightingConfiguration.COMMENT_ID);
+		
 		m_tokenmap.put("RULE_LITERAL_EXTCODE",
 				AtsIHighlightingConfiguration.EXTCODE_ID);
 		
@@ -311,29 +317,29 @@ public class AtsAntlrTokenToAttributeIdMapper extends
 				AtsIHighlightingConfiguration.STRING_ID);
 		m_tokenmap.put("RULE_SATS_STRING",
 				AtsIHighlightingConfiguration.STRING_ID);
-		m_tokenmap.put("RULE_LITERAL_char",
+		m_tokenmap.put("RULE_LITERAL_CHAR",
 				AtsIHighlightingConfiguration.STRING_ID);
 		
-		m_tokenmap.put("RULE_LITERAL_int",
+		m_tokenmap.put("RULE_LITERAL_INT",
 				AtsIHighlightingConfiguration.NUMBER_ID);
-		m_tokenmap.put("RULE_LITERAL_intsp",
+		m_tokenmap.put("RULE_LITERAL_INTSP",
 				AtsIHighlightingConfiguration.NUMBER_ID);
-		m_tokenmap.put("RULE_LITERAL_float",
+		m_tokenmap.put("RULE_LITERAL_FLOAT",
 				AtsIHighlightingConfiguration.NUMBER_ID);
-		m_tokenmap.put("RULE_LITERAL_floatsp",
+		m_tokenmap.put("RULE_LITERAL_FLOATSP",
 				AtsIHighlightingConfiguration.NUMBER_ID);
 		
 		m_tokenmap.put("RULE_ALNUMRIC_IDENTIFIER",
 				AtsIHighlightingConfiguration.IDENTITY_ID);
-		m_tokenmap.put("RULE_IDENTIFIER_arr",
+		m_tokenmap.put("RULE_IDENTIFIER_ARR",
 				AtsIHighlightingConfiguration.IDENTITY_ID);
-		m_tokenmap.put("RULE_IDENTIFIER_tmp",
+		m_tokenmap.put("RULE_IDENTIFIER_TMP",
 				AtsIHighlightingConfiguration.IDENTITY_ID);
-		m_tokenmap.put("RULE_IDENTIFIER_ext",
+		m_tokenmap.put("RULE_IDENTIFIER_EXT",
 				AtsIHighlightingConfiguration.IDENTITY_ID);
-		m_tokenmap.put("RULE_IDENTIFIER_dlr",
+		m_tokenmap.put("RULE_IDENTIFIER_DLR",
 				AtsIHighlightingConfiguration.IDENTITY_ID);
-		m_tokenmap.put("RULE_IDENTIFIER_srp",
+		m_tokenmap.put("RULE_IDENTIFIER_SRP",
 				AtsIHighlightingConfiguration.IDENTITY_ID);
 		m_tokenmap.put("RULE_SYMBOLIC_IDENTIFIER",
 				AtsIHighlightingConfiguration.IDENTITY_ID);
@@ -391,6 +397,7 @@ public class AtsAntlrTokenToAttributeIdMapper extends
 		if (null != type) {
 			return type;
 		} else {
+//			System.out.println("xxxxxxxx" + tokenName);
 			return AtsIHighlightingConfiguration.DEFAULT_ID;
 		}
 	}

@@ -3,6 +3,8 @@
 	<name>org.ats_lang.ide.sats.tests</name>
 	<comment></comment>
 	<projects>
+		<project>org.ats_lang.ide.sats</project>
+		<project>org.ats_lang.ide.sats.ui</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

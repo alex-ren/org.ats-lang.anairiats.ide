@@ -1845,7 +1845,7 @@ terminal STRING:
 ;
 
 terminal LITERAL_char:
-	"'" (('\\' .) | !('\\'|'\''))+ "'"
+	"'" (('\\' .+) | !('\\'|'\'')) "'"
 ;
 
 // todo cannot handle %{%%}, but seems not important

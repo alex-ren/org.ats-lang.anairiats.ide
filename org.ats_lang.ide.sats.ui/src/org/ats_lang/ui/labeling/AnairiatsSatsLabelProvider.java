@@ -601,6 +601,42 @@ public class AnairiatsSatsLabelProvider extends DefaultEObjectLabelProvider {
 	protected String cleanText(sqi0de ele) {
 		return ele.getM_s0taq() + ele.getM_si0de();
 	}
+
+	protected String text(d0atdec ele) {
+		return "d0atdec";
+	}
+	
+	protected String text(andd0atdecseq ele) {
+		return "andd0atdecseq";
+	}
+	
+	protected String text(s0expdefseqopt ele) {
+		return "s0expdefseqopt";
+	}
+	
+	protected String text(d0atargseq ele) {
+		return "d0atargseq";
+	}
+	
+	protected String text(d0atconseq ele) {
+		return "d0atconseq";
+	}
+	
+	protected String text(s0expdef ele) {
+		return "s0expdef";
+	}
+	
+	protected String text(colons0rtopt ele) {
+		return "colons0rtopt";
+	}
+	
+	protected String text(ands0expdefseq ele) {
+		return "ands0expdefseq";
+	
+	}
+
+
+	
 	
 	// This one gets called.
 	protected String text(refentity ele) {

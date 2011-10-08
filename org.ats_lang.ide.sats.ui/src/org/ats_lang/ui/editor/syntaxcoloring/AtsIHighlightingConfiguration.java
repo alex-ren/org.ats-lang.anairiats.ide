@@ -45,6 +45,9 @@ public class AtsIHighlightingConfiguration implements
 		
 		acceptor.acceptDefaultHighlighting(SPCHAR_ID, "Special Character",
 				spchar_colorTextStyle());
+		
+		acceptor.acceptDefaultHighlighting(DEFAULT_ID, "default",
+				default_colorTextStyle());
 	}
 
 	public TextStyle defaultTextStyle() {
@@ -110,6 +113,11 @@ public class AtsIHighlightingConfiguration implements
 	  }
 	  
 	  public TextStyle spchar_colorTextStyle() {
+		    TextStyle textStyle = new TextStyle();
+		    return textStyle;
+	  }
+	  
+	  public TextStyle default_colorTextStyle() {
 		    TextStyle textStyle = new TextStyle();
 		    return textStyle;
 	  }
